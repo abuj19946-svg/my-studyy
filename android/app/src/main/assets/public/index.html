@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>متابع دراسة التوجيهي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Reem+Kufi:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EDF2F4; --surf:#FFFFFF; --ink:#16282F; --mute:#566B73; --line:#D2DDE2;
+  --sched:#3553A0; --do:#1B7F65; --avoid:#A33F58; --prim:#0F6C7A; --tech:#6B49A8; --meal:#A66A00;
+  --good:#1B7F65; --bad:#B0431F; --soft:#E4ECEF;
+  --f-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,"Noto Sans Arabic",sans-serif;
+  --f-head:"Reem Kufi","IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1A1F; --surf:#172830; --ink:#E7EFF2; --mute:#97ABB3; --line:#2B3D45;
+    --sched:#93ABF2; --do:#5CCBAA; --avoid:#F092A8; --prim:#62C6D4; --tech:#B79CF0; --meal:#E4B04F;
+    --good:#5CCBAA; --bad:#F3A27A; --soft:#1F323A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1A1F; --surf:#172830; --ink:#E7EFF2; --mute:#97ABB3; --line:#2B3D45;
+  --sched:#93ABF2; --do:#5CCBAA; --avoid:#F092A8; --prim:#62C6D4; --tech:#B79CF0; --meal:#E4B04F;
+  --good:#5CCBAA; --bad:#F3A27A; --soft:#1F323A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;min-height:100vh}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0}
+:focus-visible{outline:3px solid var(--prim);outline-offset:2px;border-radius:8px}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 110px}
+.topline{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mute);margin-bottom:6px}
+.stat-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mute);margin-inline-end:6px;vertical-align:middle}
+.stat-dot.cloud{background:var(--good)} .stat-dot.error{background:var(--bad)}
+h1,h2,h3{margin:0;font-weight:700}
+.hero{background:var(--surf);border:1px solid var(--line);border-radius:20px;padding:18px 18px 16px;margin-bottom:16px}
+.hero .day{font-family:var(--f-head);font-size:38px;line-height:1.15;font-weight:600}
+.hero .date{color:var(--mute);font-size:15px;margin-top:2px}
+.hero-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.navbtns{display:flex;gap:6px;align-items:center}
+.ib{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;background:var(--surf)}
+.ib svg{width:20px;height:20px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px;background:var(--surf)}
+.pill.on{background:var(--prim);border-color:var(--prim);color:#fff}
+.meters{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:12px;margin-top:16px}
+.meter .lbl{font-size:13px;color:var(--mute);display:flex;justify-content:space-between}
+.meter .track{height:8px;border-radius:99px;background:var(--soft);margin-top:5px;overflow:hidden}
+.meter .fill{height:100%;border-radius:99px;transition:width .35s ease}
+.c-schedule{--c:var(--sched)} .c-do{--c:var(--do)} .c-avoid{--c:var(--avoid)} .c-tech{--c:var(--tech)} .c-meal{--c:var(--meal)} .c-rec{--c:var(--prim)}
+.fill{background:var(--c)}
+.sec{margin-bottom:20px}
+.sec-h{display:flex;justify-content:space-between;align-items:center;margin:0 4px 8px}
+.sec-h h2{font-size:18px;display:flex;align-items:center;gap:8px}
+.sec-h h2::before{content:"";width:6px;height:20px;border-radius:3px;background:var(--c)}
+.sec-h .cnt{color:var(--mute);font-size:14px}
+.sec-hint{font-size:13px;color:var(--mute);margin:-4px 4px 8px}
+ul.list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.row{width:100%;display:flex;align-items:center;gap:12px;text-align:start;background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:56px}
+.row[disabled]{opacity:.55;cursor:not-allowed}
+.box{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--c);display:grid;place-items:center;color:#fff;transition:background .15s}
+.box svg{width:16px;height:16px;opacity:0;transform:scale(.4);transition:all .18s}
+.row.done .box{background:var(--c)}
+.row.done .box svg{opacity:1;transform:scale(1)}
+.row.done .txt b{color:var(--mute);text-decoration:line-through;text-decoration-color:var(--line)}
+.row.just .box{animation:pop .3s ease}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
+.txt{flex:1;min-width:0}
+.txt b{font-weight:500;display:block}
+.txt small{display:block;color:var(--mute);font-size:13px;line-height:1.45}
+.tm{flex:none;font-size:14px;color:var(--c);font-weight:700;font-variant-numeric:tabular-nums;direction:ltr}
+.notice{background:var(--soft);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:14px;color:var(--mute)}
+.empty{padding:16px;text-align:center;color:var(--mute);background:var(--surf);border:1px dashed var(--line);border-radius:14px}
+/* week */
+.daycard{width:100%;display:grid;grid-template-columns:96px 1fr auto;gap:12px;align-items:center;background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:start}
+.daycard.today{border-color:var(--prim);box-shadow:0 0 0 2px color-mix(in srgb,var(--prim) 25%,transparent)}
+.daycard .dn{font-weight:700}
+.daycard .dd{font-size:13px;color:var(--mute)}
+.mini{display:grid;gap:5px}
+.mini .track{height:6px;border-radius:9px;background:var(--soft);overflow:hidden}
+.pct{font-family:var(--f-head);font-size:22px;min-width:52px;text-align:end;font-variant-numeric:tabular-nums}
+.pct.na{color:var(--mute);font-size:16px}
+.wkbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.wkbar .t{font-weight:700}
+/* stats */
+.card{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+.card h3{font-size:16px;margin-bottom:10px}
+.big{font-family:var(--f-head);font-size:56px;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:24px;color:var(--mute)}
+.delta{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700;margin-top:8px}
+.delta.up{background:color-mix(in srgb,var(--good) 16%,var(--surf));color:var(--good)}
+.delta.down{background:color-mix(in srgb,var(--bad) 16%,var(--surf));color:var(--bad)}
+.delta.same{background:var(--soft);color:var(--mute)}
+.cmp{display:grid;gap:14px}
+.cmp .name{display:flex;justify-content:space-between;font-size:15px;margin-bottom:4px}
+.cmp .name span:last-child{color:var(--mute);font-size:13px}
+.twin{display:grid;gap:4px}
+.twin .track{height:10px;border-radius:99px;background:var(--soft);overflow:hidden}
+.twin .track.prev .fill{opacity:.35}
+.twin .lg{font-size:12px;color:var(--mute);display:flex;justify-content:space-between}
+.chart{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:170px;padding-top:10px}
+.col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;min-width:0}
+.col .v{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.col .bars{position:relative;width:100%;flex:1;display:flex;align-items:flex-end;justify-content:center}
+.col .ghost{position:absolute;bottom:0;width:100%;border:2px dashed var(--mute);border-bottom:0;border-radius:8px 8px 0 0;opacity:.6}
+.col .bar{position:relative;width:62%;background:var(--prim);border-radius:8px 8px 0 0;min-height:3px}
+.col .nm{font-size:12px;color:var(--mute);white-space:nowrap}
+.col.future .bar{background:var(--soft)}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--mute);margin-top:10px}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;margin-inline-end:6px;vertical-align:middle}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fact{background:var(--soft);border-radius:12px;padding:12px}
+.fact .k{font-size:13px;color:var(--mute)}
+.fact .n{font-family:var(--f-head);font-size:26px}
+.miss li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.miss li:first-child{border-top:0}
+.miss .c{color:var(--mute);font-size:14px;white-space:nowrap}
+.sum{font-size:16px;line-height:1.8}
+/* edit */
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.form{background:var(--surf);border:2px solid var(--prim);border-radius:18px;padding:16px;margin-bottom:16px;display:grid;gap:12px}
+.form label{font-size:14px;color:var(--mute);display:block;margin-bottom:4px}
+.inp{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-height:46px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;background:var(--bg)}
+.chip.on{background:var(--c,var(--prim));border-color:var(--c,var(--prim));color:#fff}
+.btn{border-radius:12px;padding:11px 18px;font-weight:700;min-height:46px}
+.btn.p{background:var(--prim);color:#fff}
+.btn.g{border:1px solid var(--line);background:var(--surf)}
+.btn.wide{width:100%}
+.err{color:var(--bad);font-size:14px}
+.erow{display:flex;align-items:center;gap:10px;background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.erow .txt b{font-weight:500}
+.erow .acts{display:flex;gap:6px;flex:none}
+.erow .ib{width:38px;height:38px}
+.tag{display:inline-block;font-size:12px;border-radius:99px;padding:1px 9px;color:#fff;background:var(--c);margin-inline-end:6px}
+/* techniques */
+details.tg{background:var(--surf);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
+details.tg[open]{border-color:var(--prim)}
+details.tg summary{list-style:none;display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;min-height:56px}
+details.tg summary::-webkit-details-marker{display:none}
+details.tg summary::after{content:"";margin-inline-start:auto;width:10px;height:10px;border-inline-end:2px solid var(--mute);border-bottom:2px solid var(--mute);transform:rotate(45deg);transition:transform .2s;flex:none;order:9}
+details.tg[open] summary::after{transform:rotate(-135deg)}
+.tg .gn{font-weight:700;font-size:17px}
+.tg .gw{color:var(--mute);font-size:13px}
+.tg .gc{background:var(--soft);color:var(--mute);border-radius:99px;font-size:12px;padding:1px 9px}
+.tg .nowtag{background:var(--prim);color:#fff;border-radius:99px;font-size:12px;padding:1px 10px}
+.tg ul.list{padding:0 12px 12px}
+.tc{background:var(--bg);border-radius:12px;padding:12px 14px}
+.tc b{display:block;font-weight:700;margin-bottom:4px}
+.tc .tw,.tc .th{font-size:14.5px;line-height:1.6}
+.tc .tw span,.tc .th span{color:var(--prim);font-weight:700}
+.tc .ts{font-size:12.5px;color:var(--mute);margin-top:6px;direction:rtl}
+/* nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surf);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border-radius:12px;color:var(--mute);font-size:11.5px;min-height:52px}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button.on{color:var(--prim);font-weight:700}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:420px){.hero .day{font-size:32px}.meters{gap:8px}.daycard{grid-template-columns:78px 1fr auto}.big{font-size:46px}}
+
+/* v2 additions */
+.sec-h{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 8px;padding:6px 4px;text-align:start;min-height:44px}
+.sec-h .cnt{margin-inline-start:auto}
+.sec-h2{display:flex;justify-content:space-between;align-items:center;margin:0 4px 8px}
+.sec-h2 h2{font-size:18px;display:flex;align-items:center;gap:8px}
+.sec-h2 h2::before{content:"";width:6px;height:20px;border-radius:3px;background:var(--c)}
+.sec-h2 .cnt{color:var(--mute);font-size:14px}
+.chev{width:9px;height:9px;border-inline-end:2px solid var(--mute);border-bottom:2px solid var(--mute);transform:rotate(45deg);transition:transform .2s;flex:none;margin-inline-start:6px}
+.chev.shut{transform:rotate(-45deg)}
+.sub{font-size:14px;font-weight:700;color:var(--c);margin:12px 4px 6px}
+.sub span{font-weight:400;color:var(--mute);font-size:13px}
+.parts{background:var(--bg);border:1px solid var(--line);border-top:0;border-radius:0 0 14px 14px;margin:-8px 6px 0;padding:14px 10px 10px;display:grid;gap:8px}
+.part{display:grid;gap:4px}
+.part .pn{font-size:13px;color:var(--mute);font-weight:700}
+.part .po{display:flex;flex-wrap:wrap;gap:6px}
+.chip.pk{font-size:13.5px;padding:5px 11px;background:var(--surf)}
+.chip.pk.on{background:var(--c);border-color:var(--c);color:#fff}
+.banner{display:flex;justify-content:space-between;align-items:center;gap:10px;background:color-mix(in srgb,var(--prim) 14%,var(--surf));border:1px solid var(--prim);border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:15px}
+.card.msg{border-width:2px}
+.card.msg.good{border-color:var(--good)}
+.card.msg.steady{border-color:var(--prim)}
+.card.msg.down{border-color:var(--avoid)}
+.card.msg .sum{margin:0 0 8px}
+.boost{background:var(--soft);border-radius:12px;padding:12px 14px;margin-top:6px}
+.boost ul{margin:6px 0 0;padding-inline-start:20px}
+.boost li{margin:3px 0}
+details.stage .row{margin:0}
+.donetag{background:var(--good);color:#fff;border-radius:99px;font-size:12px;padding:1px 10px}
+.card.help{border-color:var(--avoid)}
+textarea.inp{resize:vertical;min-height:120px;line-height:1.6}
+select.inp{appearance:auto}
+.hero .track{height:8px;border-radius:99px;background:var(--soft);overflow:hidden}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<nav class="tabs" id="tabs" aria-label="التنقل"></nav>
+<script>
+(function(){
+"use strict";
+var LS="tawjihi-tracker-v1";
+var VER=2;
+var DAYS=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+var CATS={
+  schedule:{name:"الجدول",edit:"جدول",hint:""},
+  meal:{name:"الوجبات",edit:"وجبة",hint:"الهدف: 5 حصص فاكهة وخضار باليوم على الأقل، مع سكر وملح أقل. اضغط على الخيارات اللي أخذتها، وبعدين أشّر على الوجبة."},
+  "do":{name:"لازم أسوّي",edit:"أسوّي",hint:"أشياء تأشّر عليها لما تسوّيها"},
+  tech:{name:"تكنيكات",edit:"تكنيك",hint:"تكنيكات الدراسة والتركيز مقسّمة حسب وقتها. أشّر لما تطبّقها."},
+  avoid:{name:"لازم أتجنب",edit:"أتجنب",hint:"أشياء تأشّر عليها لما تتجنبها طول اليوم"}
+};
+var CKEYS=["schedule","meal","do","tech","avoid"];
+var TG=[
+  {id:"am",name:"الصباح",when:"فور الاستيقاظ",from:5,to:10},
+  {id:"pre",name:"قبل الجلسة",when:"قبل ما تبدأ الدراسة",from:10,to:15},
+  {id:"during",name:"أثناء الجلسة",when:"وأنت عم تدرس",from:15,to:19},
+  {id:"after",name:"بعد الحصة وبعد الجلسة",when:"نفس اليوم",from:19,to:21},
+  {id:"night",name:"آخر اليوم وقبل النوم",when:"من 20:30 تقريباً",from:21,to:5},
+  {id:"weekly",name:"كل أسبوع",when:"مرة بالأسبوع"},
+  {id:"exam",name:"قبل الامتحان",when:"يوم الامتحان وما قبله"},
+  {id:"long",name:"على المدى الطويل",when:"طول السنة"}
+];
+
+/* ---------- techniques (guide + tasks) ---------- */
+var DUTY=[0,1,3],TUE=[2],THU=[4],FRI=[5],SAT=[6],ALL=[0,1,2,3,4,5,6];
+var TECH=[
+ {g:"am",t:"التعرض للضوء الطبيعي",w:"لضبط الساعة البيولوجية",h:"افتح الستارة أو اطلع للشمس بعد الاستيقاظ مباشرة",s:"Roenneberg et al. (2004)",nt:1},
+ {g:"am",t:"فطور متوازن مع ماء",w:"لتحسين الانتباه والذاكرة وتجنب الجفاف",h:"بروتين + خبز كامل + فاكهة، وكاسة ماء",s:"Adolphus et al. (2013)؛ Armstrong et al. (2012)",nt:1},
+ {g:"am",t:"تأجيل الجوال أول ساعة",w:"لتبدأ يومك بدون تشتيت",h:"لا تفتح الأخبار ولا السوشيال أول ما تصحى",s:"Holman, Garfin & Silver (2014)"},
+ {g:"pre",t:"نيّات التنفيذ",w:"لتحويل «رح أدرس» لفعل محدد بوقت ومكان",h:"اكتب: إذا صارت الساعة 15:30 فبدرس رياضيات في المكتب",s:"Gollwitzer & Sheeran (2006)"},
+ {g:"pre",t:"الأصعب بوقت اليقظة الأعلى",w:"للاستفادة من ذروة نشاطك",h:"حط المادة الأصعب بجلسة 15:30 أو بصباح الخميس، وبدّل حسب أسبوعك",s:"Goldstein et al. (2007)"},
+ {g:"pre",t:"الجوال خارج الغرفة",w:"لحماية الانتباه من التشتت",h:"غرفة ثانية أو مقفل بشنطة، ووضع عدم الإزعاج",s:"Ward et al. (2017)؛ Stothart et al. (2015)",nt:1},
+ {g:"pre",t:"تجهيز البيئة",w:"لتقليل المنافسة على انتباهك",h:"طاولة فاضية إلا من مادة الجلسة، نافذة مفتوحة، بدون ضجيج أو موسيقى بكلمات",s:"McMains & Kastner (2011)؛ Shield & Dockrell (2008)"},
+ {g:"pre",t:"وجبة خفيفة قبل الجلسة",w:"لتجنب الجوع الشديد أو الامتلاء الثقيل",h:"موز أو حفنة مكسرات أو زبادي",s:"توجيه عملي مبني على الأدلة",nt:1},
+ {g:"pre",t:"قيلولة قصيرة",w:"لتحسين التعلم دون إفساد نوم الليل",h:"20 دقيقة (لا تزيد عن 30، ولا بعد 16:00)",s:"Mednick et al. (2003)؛ Brooks & Lack (2006)",nt:1},
+ {g:"during",t:"الاسترجاع الذاتي",w:"لتثبيت المعلومة، وهو أقوى من إعادة القراءة",h:"سكّر الكتاب واكتب أو احكِ كل ما تذكره، وبعدين قارن",s:"Dunlosky et al. (2013)؛ Roediger & Karpicke (2006)",nt:1},
+ {g:"during",t:"المحاولة قبل رؤية الحل",w:"لتتجنب الشعور الزائف بالمعرفة",h:"أي شرح تشوفه، سكّر الشاشة واحل المسألة بنفسك أولاً",s:"Deslauriers et al. (2019)؛ Kornell & Bjork (2007)",nt:1},
+ {g:"during",t:"التبديل بين أنواع المسائل (Interleaving)",w:"لرفع النتيجة بالاختبار المتأخر بالرياضيات والفيزياء",h:"حل مسائل مخلوطة من عدة دروس بدل نوع واحد ورا بعض",s:"Rohrer, Dedrick & Hartwig (2020)"},
+ {g:"during",t:"الصعوبة المرغوبة",w:"لتعرف إن التعلم الحقيقي مش دايماً مريح",h:"إذا حسيت الدراسة سهلة ومريحة، اختبر نفسك أكثر بدل ما تعيد القراءة",s:"Bjork & Bjork (2011)"},
+ {g:"during",t:"شرح الدرس بصوت عالٍ (فاينمان)",w:"لاختبار فهمك الحقيقي",h:"اشرح الدرس كأنك تعلّم أحداً",s:"Dunlosky et al. (2013)"},
+ {g:"during",t:"استراحات قصيرة ومتكررة",w:"للحفاظ على التركيز",h:"جلسات 45-50 دقيقة بينها استراحة 10 دقائق",s:"Ariga & Lleras (2011)"},
+ {g:"during",t:"قاعدة 20-20-20",w:"لراحة العين وتقليل إجهادها",h:"كل 20 دقيقة شوف شي على بعد 6 أمتار لمدة 20 ثانية",s:"Sheppard & Wolffsohn (2018)",nt:1},
+ {g:"during",t:"مهمة وحدة بكل مرة",w:"لأن تبديل المهام يبطّئ ويزيد الأخطاء",h:"لا تتنقل بين المواد أو التطبيقات وسط الجلسة",s:"Rubinstein, Meyer & Evans (2001)",nt:1},
+ {g:"after",t:"حل مسائل الحصة بدون النظر للحل",w:"للاسترجاع المبكر بنفس اليوم",h:"بعد حصة الرياضيات يوم الثلاثاء، حل مسائل منها (11:00-12:30)",s:"Roediger & Karpicke (2006)؛ Sweller & Cooper (1985)",d:TUE},
+ {g:"after",t:"مراجعة فصول قديمة حسب الجدول",w:"للحفظ طويل المدى بدل الحشو",h:"راجع الفصل بعد يوم، ثم 3 أيام، ثم أسبوع، ثم أسبوعين، ثم شهر (جدول تقريبي)",s:"Cepeda et al. (2006, 2008)"},
+ {g:"after",t:"دفتر الأخطاء",w:"للتعلم من الأخطاء بدل تكرارها",h:"لكل مسألة أخطأت فيها اكتب السبب والحل الصحيح",s:"Metcalfe (2017)",nt:1},
+ {g:"after",t:"حركة 30-60 دقيقة",w:"لتحسين الانتباه والمزاج",h:"مشي سريع أو تمرين بين الجلسات",s:"Donnelly et al. (2016)؛ Hillman et al. (2008)",nt:1},
+ {g:"after",t:"عشاء وعائلة بدون دراسة",w:"للراحة النفسية والدعم الاجتماعي",h:"اترك الدراسة جانباً وقت العشاء",s:"Cohen & Wills (1985)",nt:1},
+ {g:"night",t:"بطاقات استرجاع",w:"لتثبيت المواد الحفظية",h:"راجع بطاقاتك بدون النظر للإجابة أولاً",s:"Dunlosky et al. (2013)"},
+ {g:"night",t:"تخطيط الغد",w:"لتنام مرتاح ويكون الغد واضح",h:"اكتب 3 أهداف للغد وحدد أول جلسة، وراجع دفتر الأخطاء",s:"Metcalfe (2017)"},
+ {g:"night",t:"إضاءة خافتة دافئة آخر ساعة",w:"لتقليل تثبيط الميلاتونين",h:"خفّض إضاءة الغرفة آخر ساعة قبل النوم",s:"Gooley et al. (2011)"},
+ {g:"night",t:"ابتعد عن الشاشات 45 دقيقة",w:"لأن الشاشات تثبّط الميلاتونين وتؤخر النوم",h:"دش، قراءة خفيفة، تأمل",s:"Chang et al. (2015)",nt:1},
+ {g:"night",t:"10 دقائق يقظة ذهنية (Mindfulness)",w:"لتحسين الذاكرة العاملة وتقليل شرود الذهن",h:"تنفس بهدوء وركّز على أنفاسك",s:"Mrazek et al. (2013)",nt:1},
+ {g:"night",t:"نوم 8 ساعات بموعد ثابت",w:"لتثبيت الذاكرة وتحسين الأداء",h:"نوم بحدود 22:15، وحافظ على الموعد بالعطلة (فرق ساعة تقريباً)",s:"Diekelmann & Born (2010)؛ Paruthi et al. (2016)؛ Wittmann et al. (2006)",nt:1},
+ {g:"night",t:"الأخبار مرتين بس باليوم",w:"لتقليل التوتر الحاد من التصفح المتواصل",h:"10 دقائق ظهراً و10 مساءً، ولا قبل النوم ولا قبل الدراسة",s:"Holman, Garfin & Silver (2014)",nt:1},
+ {g:"night",t:"لا كافيين بعد 16:00",w:"لأن الكافيين المتأخر يقلل النوم",h:"قاعدة 6 ساعات قبل النوم",s:"Drake et al. (2013)",nt:1},
+ {g:"weekly",t:"امتحان تدريبي مؤقّت",w:"لتدريب الاسترجاع بظروف شبيهة بالامتحان",h:"صباح الجمعة، ساعتان، من أسئلة سنوات سابقة، وتصحيحه السبت",s:"Dunlosky et al. (2013)",d:FRI},
+ {g:"weekly",t:"مراجعة أسبوعية",w:"لتصحيح الامتحان وتعديل الخطة",h:"السبت: صحح امتحان الجمعة وخطط للأسبوع الجاي وشوف إحصائياتك هون",s:"Metcalfe (2017)",nt:1},
+ {g:"weekly",t:"راحة حقيقية",w:"لحماية نفسك من الإرهاق",h:"بعد ظهر الجمعة: عائلة، أصدقاء، هواية، طبيعة",s:"Sonnentag & Fritz (2007)",nt:1},
+ {g:"weekly",t:"مراجعة الخطة كل 4-6 أسابيع",w:"لتعرف أي مادة تتأخر",h:"عدّل توزيع المواد على الجلسات حسب نتائجك",s:"—",nt:1},
+ {g:"exam",t:"كتابة المخاوف 10 دقائق",w:"لتخفيف قلق الامتحان وتحسين الأداء عند القلقين",h:"اكتب مخاوفك قبل الامتحان التدريبي بـ 10 دقائق",s:"Ramirez & Beilock (2011)",d:FRI},
+ {g:"exam",t:"إعادة تفسير التوتر كطاقة",w:"لتحسين الأداء تحت الضغط",h:"قل لنفسك: جسمي يستعد",s:"Jamieson et al. (2010)",d:FRI},
+ {g:"exam",t:"نوم كافٍ بدل الحشو الليلي",w:"لأن الحرمان من النوم يضعف الأداء بالامتحان",h:"لا تسهر قبل الامتحان لدراسة أكثر",s:"Gillen-O'Neel et al. (2013)؛ Pilcher & Walters (1997)",nt:1},
+ {g:"long",t:"بناء العادة",w:"لتثبيت النظام",h:"متوسط 66 يوماً (المدى 18-254)، ولا تغيّر كل شي مرة وحدة",s:"Lally et al. (2010)",nt:1},
+ {g:"long",t:"لو فاتك يوم ارجع فوراً",w:"لأن يوم واحد ما يكسر العادة",h:"ارجع للخطة بالصباح اللي بعده",s:"Lally et al. (2010)",nt:1},
+ {g:"long",t:"التعاطف مع الذات بعد الخطأ",w:"لأنه يزيد الدافع للتحسّن ولا يقلله",h:"قارن نفسك بنفسك الأسبوع الماضي، مش بزملائك",s:"Breines & Chen (2012)"},
+ {g:"long",t:"الجودة قبل عدد الساعات",w:"لتتجنب الإرهاق",h:"لا ترفع الساعات فوق 6-7 يومياً بدون زيادة جودة",s:"Ericsson, Krampe & Tesch-Römer (1993)",nt:1}
+];
+
+/* ---------- meals ---------- */
+var MEALS=[
+ {id:"ml1",title:"الفطور",time:"06:45",note:"خلال ساعة من الاستيقاظ (بالعطلة بحدود الساعة 8)",parts:[
+  {n:"بروتين",o:["بيض مسلوق أو عجّة","لبنة","جبنة بيضاء","فول","حمص","زبادي"]},
+  {n:"نشويات كاملة",o:["خبز كامل","خبز عربي أسمر","شوفان","خبز شعير"]},
+  {n:"خضار أو فاكهة",o:["خيار وبندورة","موزة","تفاحة","برتقالة","تمر 2-3 حبات"]},
+  {n:"دهون صحية",o:["زيت زيتون","زيتون","حفنة مكسرات"]},
+  {n:"سوائل",o:["ماء","حليب","شاي خفيف"]}]},
+ {id:"ml2",title:"وجبة خفيفة منتصف الصباح",time:"10:30",note:"تمنع الجوع الشديد قبل الغداء",parts:[
+  {n:"اختر واحد",o:["فاكهة","زبادي","حفنة مكسرات","ساندويشة صغيرة (لبنة أو جبنة)","خيار وجزر"]},
+  {n:"سوائل",o:["ماء"]}]},
+ {id:"ml3",title:"الغداء",time:"14:30",note:"وجبة الطاقة الرئيسية، وخلّيها مشبعة بدون ثقل زيادة قبل الجلسة",parts:[
+  {n:"بروتين",o:["دجاج مشوي أو مسلوق","سمك","لحمة قليلة الدهن","عدس","فاصولياء أو حمص","بيض"]},
+  {n:"نشويات كاملة",o:["برغل","رز (يفضّل أسمر)","بطاطا مسلوقة أو مشوية","فريكة","معكرونة قمح كامل","خبز كامل"]},
+  {n:"خضار",o:["سلطة خيار وبندورة","سلطة ورقية","خضار مطبوخة","شوربة عدس أو خضار"]},
+  {n:"دهون صحية",o:["زيت زيتون على السلطة","طحينة"]},
+  {n:"أو طبق كامل",o:["مجدّرة مع سلطة","مقلوبة مع سلطة","برغل بندورة مع لبن","شوربة عدس مع خبز"]}]},
+ {id:"ml4",title:"وجبة قبل الجلسة",time:"15:00",note:"خفيفة، قبل الجلسة بنص ساعة تقريباً",parts:[
+  {n:"اختر واحد",o:["موزة","حفنة مكسرات","زبادي","تمر مع مكسرات","فاكهة مع جبنة","خبز كامل مع لبنة"]}]},
+ {id:"ml5",title:"العشاء",time:"19:30",note:"خفيف، وخلّيه قبل النوم بساعتين على الأقل",parts:[
+  {n:"بروتين",o:["بيض","لبنة","جبنة","تونة","دجاج","فول أو حمص"]},
+  {n:"نشويات كاملة",o:["خبز كامل (قطعة)","برغل","شوفان"]},
+  {n:"خضار",o:["سلطة","خضار مشوية","شوربة خضار"]}]}
+];
+
+function newSeeds(cf){
+  var t=[];
+  TECH.forEach(function(x,i){
+    if(x.nt)return;
+    t.push({id:"tk"+i,cat:"tech",grp:x.g,title:x.t,days:(x.d||ALL).slice(),time:"",note:x.h,createdFrom:cf});
+  });
+  MEALS.forEach(function(m){
+    t.push({id:m.id,cat:"meal",title:m.title,days:ALL.slice(),time:m.time,note:m.note,parts:JSON.parse(JSON.stringify(m.parts)),createdFrom:cf});
+  });
+  return t;
+}
+
+/* ---------- base seeds ---------- */
+var seedN=0;
+function mk(cat,days,time,title,note){seedN++;return {id:"s"+seedN,cat:cat,title:title,days:days,time:time||"",note:note||"",createdFrom:"2000-01-01"};}
+function seeds(){
+  seedN=0;var t=[];
+  t.push(mk("schedule",DUTY,"06:15","استيقاظ، ماء، ضوء طبيعي، فطور","بروتين وكربوهيدرات بطيئة"));
+  t.push(mk("schedule",DUTY,"07:30","المدرسة: ملاحظات قصيرة","حدد 3 أسئلة غير مفهومة"));
+  t.push(mk("schedule",DUTY,"14:30","غداء"));
+  t.push(mk("schedule",DUTY,"15:00","قيلولة اختيارية 20 دقيقة","لا تزيد عن 30 دقيقة، ولا بعد 16:00"));
+  t.push(mk("schedule",DUTY,"15:30","الجلسة 1 (الأصعب): رياضيات أو فيزياء","جلستان من 50 دقيقة بينهما استراحة 10 دقائق"));
+  t.push(mk("schedule",DUTY,"17:20","حركة: مشي سريع أو تمرين 30 دقيقة"));
+  t.push(mk("schedule",DUTY,"18:00","الجلسة 2: كيمياء / أحياء / مادة ثانية","جلستان من 45 دقيقة"));
+  t.push(mk("schedule",DUTY,"19:30","عشاء وعائلة","بدون دراسة"));
+  t.push(mk("schedule",DUTY,"20:30","الجلسة 3 (خفيفة)","بطاقات استرجاع، مراجعة دفتر الأخطاء، تخطيط الغد"));
+  t.push(mk("schedule",DUTY,"21:30","ابتعد عن الشاشات: دش، قراءة خفيفة، تأمل"));
+  t.push(mk("schedule",DUTY,"22:15","نوم","8 ساعات تقريباً"));
+  t.push(mk("schedule",TUE,"06:45","استيقاظ وفطور"));
+  t.push(mk("schedule",TUE,"08:00","حصة الرياضيات","حل مع المعلم ولا تكتفِ بالنسخ"));
+  t.push(mk("schedule",TUE,"10:30","استراحة وحركة"));
+  t.push(mk("schedule",TUE,"11:00","حل مسائل من نفس الحصة بدون النظر للحل","استرجاع في نفس اليوم"));
+  t.push(mk("schedule",TUE,"12:30","غداء وراحة وقيلولة"));
+  t.push(mk("schedule",TUE,"15:00","الجلسة 1: فيزياء أو مادة علمية ثانية"));
+  t.push(mk("schedule",TUE,"17:00","حركة"));
+  t.push(mk("schedule",TUE,"18:00","الجلسة 2"));
+  t.push(mk("schedule",TUE,"19:30","عشاء"));
+  t.push(mk("schedule",TUE,"20:30","مراجعة خفيفة وتخطيط"));
+  t.push(mk("schedule",TUE,"22:30","نوم"));
+  t.push(mk("schedule",THU,"07:00","استيقاظ، ضوء، فطور"));
+  t.push(mk("schedule",THU,"08:00","جلسة عميقة 1: مادة صعبة","جلستان من 50 دقيقة"));
+  t.push(mk("schedule",THU,"10:00","استراحة وحركة"));
+  t.push(mk("schedule",THU,"10:30","جلسة 2: مادة ثانية"));
+  t.push(mk("schedule",THU,"12:30","غداء وراحة وقيلولة"));
+  t.push(mk("schedule",THU,"15:00","جلسة 3: مسائل مخلوطة من عدة دروس","Interleaving"));
+  t.push(mk("schedule",THU,"17:00","رياضة أو مشي"));
+  t.push(mk("schedule",THU,"18:00","مراجعة دفتر الأخطاء"));
+  t.push(mk("schedule",FRI,"","امتحان تدريبي مؤقّت (ساعتان) صباحاً","من أسئلة سنوات سابقة بظروف شبيهة بالامتحان الحقيقي"));
+  t.push(mk("schedule",FRI,"","راحة كاملة بعد الظهر","عائلة، أصدقاء، هواية، طبيعة"));
+  t.push(mk("schedule",SAT,"","مراجعة أسبوعية صباحاً","تصحيح امتحان الجمعة"));
+  t.push(mk("schedule",SAT,"","تخطيط الأسبوع القادم"));
+  t.push(mk("schedule",SAT,"","النوم بنفس موعد أيام الدوام","عشان الأحد ما يكون صعب"));
+  t.push(mk("do",ALL,"","نمت 8 ساعات تقريباً بموعد ثابت"));
+  t.push(mk("do",ALL,"","فطور + ماء"));
+  t.push(mk("do",ALL,"","الجوال خارج الغرفة وقت الجلسات"));
+  t.push(mk("do",ALL,"","حللت المسائل قبل ما أشوف الحل"));
+  t.push(mk("do",ALL,"","اختبرت نفسي بدون النظر للكتاب","استرجاع ذاتي"));
+  t.push(mk("do",ALL,"","حركة 30-60 دقيقة"));
+  t.push(mk("do",ALL,"","دقائق بالشمس أو الخارج"));
+  t.push(mk("do",ALL,"","دفتر الأخطاء محدّث"));
+  t.push(mk("do",ALL,"","قاعدة 20-20-20 للعين","كل 20 دقيقة شوف شي على بعد 6 أمتار لمدة 20 ثانية"));
+  t.push(mk("do",ALL,"","10 دقائق يقظة ذهنية (Mindfulness)"));
+  t.push(mk("avoid",ALL,"","كافيين بعد 16:00"));
+  t.push(mk("avoid",ALL,"","متابعة الأخبار أكثر من مرتين","10 دقائق ظهراً و10 مساءً، ولا قبل النوم ولا قبل الدراسة"));
+  t.push(mk("avoid",ALL,"","شاشات آخر 45 دقيقة قبل النوم"));
+  t.push(mk("avoid",ALL,"","سكرولينج (ريلز / تيك توك) وقت الدراسة"));
+  t.push(mk("avoid",ALL,"","تعدد المهام أثناء الجلسة"));
+  t.push(mk("avoid",ALL,"","السهر والحشو الليلي"));
+  t.push(mk("avoid",ALL,"","مشروبات الطاقة"));
+  t.push(mk("avoid",ALL,"","الأرجيلة والسجائر والفيب"));
+  t.push(mk("avoid",ALL,"","التظليل وإعادة القراءة كطريقة رئيسية"));
+  t.push(mk("avoid",ALL,"","قراءة الحل قبل ما أحاول"));
+  t.push(mk("avoid",ALL,"","موسيقى بكلمات أو تلفزيون أثناء الدراسة"));
+  t.push(mk("avoid",ALL,"","الدراسة بالسرير"));
+  t.push(mk("avoid",ALL,"","جلد الذات ومقارنة نفسي بزملائي"));
+  t.push(mk("avoid",ALL,"","تخطي الوجبات والسكريات المصنّعة"));
+  return t.concat(newSeeds("2000-01-01"));
+}
+
+/* ---------- recovery plan ---------- */
+var RECOV={
+ body:{name:"التعافي الجسدي",intro:"خمس مراحل متسلسلة، كل مرحلة بحدود أسبوع. ما تنتقل للي بعدها قبل ما تثبّت الحالية. إذا عندك مشكلة صحية أو ألم مستمر، استشر طبيب قبل ما ترفع التمارين.",
+  src:"WHO healthy diet (✓ تم التحقق)؛ Bull et al. (2020) توصيات منظمة الصحة للنشاط البدني؛ Paruthi et al. (2016) للنوم؛ Donnelly et al. (2016)؛ Drake et al. (2013). (المصادر ما عدا الأول من الذاكرة)",
+  stages:[
+  {id:"b1",name:"المرحلة 1: الأساسات",wk:"الأسبوع 1",goal:"نوم وأكل وماء ثابتين قبل أي شي ثاني.",steps:[
+   "حدد موعد نوم واستيقاظ ثابتين (النوم بحدود 22:15)",
+   "حط قارورة ماء على طاولتك واشربها خلال اليوم",
+   "افطر كل يوم خلال ساعة من الاستيقاظ (بروتين + نشويات كاملة + فاكهة)",
+   "اطلع للشمس 10 دقائق بالصباح",
+   "امشِ 15-20 دقيقة يومياً",
+   "اقطع الكافيين بعد الساعة 16:00"]},
+  {id:"b2",name:"المرحلة 2: الحركة والوجبات",wk:"الأسبوع 2",goal:"ارفع الحركة وانتظم بالوجبات.",steps:[
+   "حركة 30 دقيقة (مشي سريع أو تمرين) 5 أيام بالأسبوع",
+   "وجبات منتظمة: 3 رئيسية ووجبتين خفيفتين (من قسم الوجبات)",
+   "5 حصص فاكهة وخضار باليوم على الأقل",
+   "قلّل المشروبات الغازية والعصائر المحلاة والحلويات",
+   "تمدد 5 دقائق بعد كل جلسة طويلة",
+   "طبّق قاعدة 20-20-20 للعين"]},
+  {id:"b3",name:"المرحلة 3: النوم العميق",wk:"الأسبوع 3",goal:"ثبّت جودة نومك لأنه أساس التركيز والذاكرة.",steps:[
+   "نفس موعد النوم حتى بالعطلة (فرق ساعة بالكثير)",
+   "ابتعد عن الشاشات 45 دقيقة قبل النوم",
+   "إضاءة خافتة دافئة آخر ساعة",
+   "غرفة مظلمة وهادئة وفيها هواء نقي",
+   "لا دراسة بالسرير",
+   "قيلولة 20 دقيقة فقط وقبل 16:00 إذا احتجتها"]},
+  {id:"b4",name:"المرحلة 4: رفع الطاقة",wk:"الأسبوع 4",goal:"قوّي جسمك وغذّيه بشكل أفضل.",steps:[
+   "تمرين أقوى مرتين بالأسبوع (جري خفيف، حبل، تمارين وزن الجسم) 20-30 دقيقة",
+   "أكل قريب من المتوسطي: بقوليات، خضار، زيت زيتون، مكسرات، حبوب كاملة",
+   "إذا تعبان باستمرار رغم النوم والأكل: اطلب فحص دم من طبيب (مثل الحديد) قبل أي مكمل",
+   "لا مشروبات طاقة ولا أرجيلة ولا سجائر ولا فيب",
+   "قلّل الملح والأكل السريع المصنّع"]},
+  {id:"b5",name:"المرحلة 5: الثبات",wk:"الأسبوع 5 وما بعده",goal:"حافظ على اللي بنيته حتى بأسابيع الضغط.",steps:[
+   "راجع إحصائيات الأسبوع كل سبت",
+   "حافظ على النوم والحركة حتى بأسابيع الامتحانات",
+   "خذ أسبوعاً أخف كل 4-6 أسابيع",
+   "يوم راحة حقيقي كل أسبوع"]}
+ ]},
+ mind:{name:"التعافي النفسي",intro:"ست مراحل متسلسلة: تهدئة، ثم تقليل التلفون، ثم استعادة التركيز، ثم توازن النفس. كل مرحلة بحدود أسبوع. هذه خطة مساعدة ذاتية وما بتغني عن مختص إذا عندك أعراض مستمرة.",
+  src:"Zaccaro et al. (2018) للتنفس البطيء (✓ تم التحقق)؛ Hunt et al. (2018) لتقليل السوشيال (✓ تم التحقق، طلاب جامعة 143 شخص لمدة 3 أسابيع)؛ Mrazek et al. (2013)؛ Ramirez & Beilock (2011)؛ Breines & Chen (2012). (غير المؤشّر عليها من الذاكرة)",
+  stages:[
+  {id:"m1",name:"المرحلة 1: تهدئة وقياس",wk:"الأسبوع 1",goal:"هدّي جسمك وشوف الوضع الحقيقي قبل ما تغيّر شي.",steps:[
+   "تنفس بطيء 5 دقائق مرتين باليوم: شهيق 4 ثواني وزفير 6 ثواني",
+   "اكتب كل ليلة 10 دقائق بورقة: شو شاغل بالك؟ وبعدين سكّرها",
+   "افتح إحصائيات وقت الشاشة واكتب معدلك اليومي (قياس بدون تغيير)",
+   "طفّي الإشعارات غير الضرورية (خلّي الاتصال والرسائل المهمة بس)"]},
+  {id:"m2",name:"المرحلة 2: ابعد التلفون خطوة",wk:"الأسبوع 2",goal:"سافر التلفون من أماكن حياتك المهمة.",steps:[
+   "التلفون خارج غرفة النوم ليلاً (استخدم منبه عادي)",
+   "التلفون بغرفة ثانية وقت كل جلسة دراسة",
+   "شيل تطبيقات السوشيال من الشاشة الرئيسية وسجّل خروج",
+   "حدد حد يومي للسوشيال بإعدادات وقت الشاشة (مثلاً 30 دقيقة)",
+   "جرّب الشاشة أبيض وأسود لتقلل الجاذبية (اختياري)"]},
+  {id:"m3",name:"المرحلة 3: استعادة التركيز",wk:"الأسبوع 3",goal:"درّب انتباهك على النفس الطويل.",steps:[
+   "جلسة 50 دقيقة بدون تلفون أبداً، بعدها استراحة 10 دقائق",
+   "مهمة وحدة بكل مرة بدون تنقل بين المواد أو التطبيقات",
+   "ابدأ كل جلسة بـ 10 دقائق سهلة لتسخّن",
+   "10 دقائق يقظة ذهنية يومياً: ركّز على أنفاسك، وارجع لما يشرد ذهنك",
+   "اكتب بورقة أي فكرة تشتتك وارجع للمهمة",
+   "استراحاتك بدون شاشات: ماء، تمدد، نظر بعيد"]},
+  {id:"m4",name:"المرحلة 4: تقليل التلفون أكثر",wk:"الأسبوع 4",goal:"حوّل التلفون من عادة لأداة بأوقات محددة.",steps:[
+   "حدد 3 أوقات لفحص الجوال باليوم (مثلاً بعد الغداء وبعد الجلسة 2 وقبل العشاء)",
+   "أول ساعة بعد الاستيقاظ وآخر 45 دقيقة قبل النوم بدون تلفون",
+   "احذف أو سجّل خروج من أكثر تطبيق بيسحبك",
+   "جهّز 3 بدائل لوقت الملل: مشي، قراءة، مكالمة صديق",
+   "لو انزلقت: ارجع بالجلسة الجاية بدون جلد ذات"]},
+  {id:"m5",name:"المرحلة 5: توازن النفس",wk:"الأسبوع 5",goal:"ابني توازن بين الإنجاز والراحة.",steps:[
+   "حد أدنى لليوم الصعب: 3 مهام بس (نوم، حركة، جلسة وحدة)",
+   "30 دقيقة ممتعة مجدولة كل يوم (هواية أو شي بتحبه)",
+   "تواصل حقيقي مع أهلك أو صديق مرة باليوم",
+   "لما تغلط اكتب: غلطت، وهذا طبيعي، شو الخطوة الجاية؟",
+   "قارن نفسك بنفسك الأسبوع الماضي فقط",
+   "يوم راحة حقيقي كل أسبوع"]},
+  {id:"m6",name:"المرحلة 6: ثبّت الصحة النفسية",wk:"الأسبوع 6 وما بعده",goal:"حافظ على الاستقرار وجهّز نفسك للضغط.",steps:[
+   "مراجعة أسبوعية: شو رفع معنوياتي وشو أرهقني؟",
+   "روتين قبل الامتحان: كتابة المخاوف 10 دقائق، وتنفس بطيء، وقل لنفسك: جسمي يستعد",
+   "حافظ على حدود التلفون الجديدة حتى بأسابيع الضغط",
+   "اعرف علامات الطلب للمساعدة (تحت) وتذكّر إن الطلب منها قوة",
+   "كافئ نفسك على كل مرحلة خلّصتها"]}
+ ]}
+};
+var CALM=[
+ {t:"تنفس 4-6",h:"شهيق من الأنف 4 ثواني، زفير بطيء 6 ثواني. كرر 3-5 دقائق. التنفس أقل من 10 مرات بالدقيقة ارتبط بتحسن الهدوء والتحكم بالمشاعر عند الأصحاء."},
+ {t:"التأريض 5-4-3-2-1",h:"سمّ 5 أشياء تشوفها، 4 تلمسها، 3 تسمعها، 2 تشمها، 1 تتذوقها. ينقل انتباهك من القلق للحظة الحالية."},
+ {t:"شد وإرخاء العضلات",h:"شدّ كل مجموعة عضلات 5 ثواني (قدمين، ساقين، بطن، ذراعين، كتفين، وجه) وبعدين أرخيها 10 ثواني، من تحت لفوق."},
+ {t:"ورقة المخاوف",h:"اكتب كل اللي شاغل بالك 10 دقائق بدون ترتيب، وبعدين سكّر الورقة. بيخفف القلق قبل الامتحان."},
+ {t:"مشوار قصير",h:"10 دقائق مشي بره، يفضّل بالشمس وبدون تلفون."}
+];
+var HELP=[
+ "حزن أو فقدان اهتمام بأشياء كنت تحبها أكثر من أسبوعين",
+ "نوم أو أكل مضطرب بشكل واضح ومستمر",
+ "نوبات هلع أو قلق شديد بتمنعك من الدراسة أو الحياة",
+ "إحساس بيأس أو إنك عبء على غيرك",
+ "أي أفكار لإيذاء نفسك"
+];
+
+/* ---------- weekly messages ---------- */
+var MSG_GOOD=[
+ "ماشاء الله عليك! أسبوعك أقوى من اللي قبله، وهذا من التزامك مش من الحظ.",
+ "كل صح أشّرته كان قرار صغير، ومجموعها صار تقدّم حقيقي. كمّل.",
+ "أنت عم تبني عادات، والمعدل العالي بيتبنى بالأسابيع مش بيوم.",
+ "فخور فيك. خذلك لحظة وكافئ نفسك بشي بسيط.",
+ "التحسّن هيك بيبدأ: خطوة فوق خطوة. حافظ على اللي نجح معك."
+];
+var MSG_STEADY=[
+ "أسبوعك ثابت. والثبات هو الأصعب وهو اللي بيوصّل.",
+ "ما تغيّر كثير عن الأسبوع الماضي، وهذا مش سيّئ: الأساس مبني. اختر شي واحد بس تحسّنه الأسبوع الجاي."
+];
+var MSG_DOWN=[
+ "أسبوع أنزل من اللي قبله؟ عادي. ما معناها إنك فشلت، معناها إنك إنسان.",
+ "الأسابيع الصعبة جزء من أي رحلة. المهم ترجع، وأنت رجعت لما فتحت هالصفحة.",
+ "نزول أسبوع ما بيمسح شغل الأسابيع اللي قبله. اللي بنيته لسا موجود."
+];
+var BOOST=[
+ "ابدأ بأصغر مهمة وسوّيها الحين (دقيقتين بس)",
+ "امشِ 10 دقائق بره، يفضّل بالشمس وبدون تلفون",
+ "كلّم حدا بتحبه أو بيفهمك",
+ "نام بكير الليلة وخلّي التلفون بغرفة ثانية",
+ "اكتب 3 أشياء سوّيتها صح هالأسبوع مهما كانت صغيرة",
+ "اكتب بجملة وحدة ليش بدك هالهدف",
+ "قلّل خطة الأسبوع الجاي: نوم وحركة وجلستين، وزد بعدين",
+ "كافئ نفسك بشي بسيط بتحبه"
+];
+
+/* ---------- date helpers ---------- */
+function pad(n){return String(n).padStart(2,"0");}
+function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+function parse(s){var p=s.split("-").map(Number);return new Date(p[0],p[1]-1,p[2]);}
+function addDays(d,n){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()+n);return x;}
+function wkStart(d){return addDays(d,-d.getDay());}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function fmtDate(s){var d=parse(s);return d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();}
+function shortDate(s){var d=parse(s);return d.getDate()+"/"+(d.getMonth()+1);}
+function today(){return ymd(new Date());}
+
+/* ---------- state ---------- */
+var S={tasks:null,done:{},picks:{},recov:{},set:{weeklyMsg:true},ver:VER,tab:"today",sel:today(),
+  sw:ymd(wkStart(new Date())),weekView:ymd(wkStart(new Date())),filter:"all",edit:null,editErr:"",status:"connecting",
+  just:null,coll:{},tview:"mine",rtab:"body",ropen:{}};
+try{
+  var raw=localStorage.getItem(LS);
+  if(raw){
+    var o=JSON.parse(raw);
+    if(o&&Array.isArray(o.tasks)&&o.tasks.length){S.tasks=o.tasks;S.ver=o.ver||1;}
+    if(o&&o.done)S.done=o.done;
+    if(o&&o.picks)S.picks=o.picks;
+    if(o&&o.recov)S.recov=o.recov;
+    if(o&&o.set)S.set=o.set;
+  }
+}catch(e){}
+if(!S.tasks){S.tasks=seeds();S.ver=VER;}
+function migrate(){
+  if((S.ver||1)>=VER)return false;
+  var have={};S.tasks.forEach(function(t){have[t.id]=1;});
+  newSeeds(today()).forEach(function(t){if(!have[t.id])S.tasks.push(t);});
+  S.ver=VER;return true;
+}
+migrate();
+
+/* ---------- task logic ---------- */
+function applies(t,ds){
+  if(ds<t.createdFrom)return false;
+  if(t.archivedFrom&&ds>=t.archivedFrom)return false;
+  if(t.gaps){for(var i=0;i<t.gaps.length;i++){if(ds>=t.gaps[i][0]&&ds<t.gaps[i][1])return false;}}
+  return t.days.indexOf(parse(ds).getDay())>=0;
+}
+function tasksFor(ds,cat){
+  var l=S.tasks.filter(function(t){return t.cat===cat&&applies(t,ds);});
+  if(cat==="schedule"||cat==="meal"){
+    l=l.map(function(t,i){return {t:t,i:i};}).sort(function(a,b){
+      var x=a.t.time||"99:99",y=b.t.time||"99:99";return x<y?-1:x>y?1:a.i-b.i;}).map(function(o){return o.t;});
+  }
+  return l;
+}
+function isDone(ds,id){var a=S.done[ds];return !!a&&a.indexOf(id)>=0;}
+function dayStat(ds){
+  var r={all:{d:0,t:0}};
+  CKEYS.forEach(function(c){
+    var l=tasksFor(ds,c),d=0;l.forEach(function(t){if(isDone(ds,t.id))d++;});
+    r[c]={d:d,t:l.length};r.all.d+=d;r.all.t+=l.length;
+  });
+  return r;
+}
+function pc(o){return o.t?o.d/o.t:null;}
+function pcs(o){var p=pc(o);return p==null?"—":Math.round(p*100)+"%";}
+
+/* ---------- persistence ---------- */
+var dbCol=null,dirtyCfg=false,dirtyWeeks={},timer=null,flushing=false;
+function weekOf(ds){return ymd(wkStart(parse(ds)));}
+function weekDone(w){
+  var out={},ws=parse(w);
+  for(var i=0;i<7;i++){var k=ymd(addDays(ws,i));if(S.done[k]&&S.done[k].length)out[k]=S.done[k];}
+  return out;
+}
+function weekPicks(w){
+  var out={},ws=parse(w);
+  for(var i=0;i<7;i++){var k=ymd(addDays(ws,i));if(S.picks[k]&&Object.keys(S.picks[k]).length)out[k]=S.picks[k];}
+  return out;
+}
+function persistLocal(){try{localStorage.setItem(LS,JSON.stringify({tasks:S.tasks,done:S.done,picks:S.picks,recov:S.recov,set:S.set,ver:S.ver}));}catch(e){}}
+function queue(week){
+  if(week)dirtyWeeks[week]=1;else dirtyCfg=true;
+  persistLocal();
+  if(dbCol){setStatus("saving");clearTimeout(timer);timer=setTimeout(flush,700);}else setStatus("local");
+}
+function cfgDoc(){return {tasks:S.tasks,v:S.ver,recov:S.recov,set:S.set};}
+function flush(){
+  if(!dbCol)return;
+  if(flushing){timer=setTimeout(flush,500);return;}
+  flushing=true;
+  var p=Promise.resolve();
+  if(dirtyCfg){dirtyCfg=false;p=p.then(function(){return dbCol.doc("cfg").set(cfgDoc());}).catch(function(){dirtyCfg=true;throw 1;});}
+  Object.keys(dirtyWeeks).forEach(function(w){
+    p=p.then(function(){delete dirtyWeeks[w];return dbCol.doc("w-"+w).set({done:weekDone(w),picks:weekPicks(w)});}).catch(function(e){dirtyWeeks[w]=1;throw 1;});
+  });
+  p.then(function(){setStatus("cloud");}).catch(function(){setStatus("error");}).then(function(){flushing=false;});
+}
+function setStatus(s){S.status=s;var el=document.getElementById("stat");if(el)el.innerHTML=statusHtml();}
+function statusHtml(){
+  var m={connecting:["","جارٍ الاتصال…"],saving:["","جارٍ الحفظ…"],cloud:["cloud","محفوظ بحسابك"],local:["","محفوظ على هذا الجهاز فقط"],error:["error","تعذّر الحفظ بحسابك، محفوظ على الجهاز"]}[S.status]||["",""];
+  return '<i class="stat-dot '+m[0]+'"></i>'+m[1];
+}
+function initDb(){
+  if(!window.claude||!window.claude.use){setStatus("local");return;}
+  Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
+    var db=r[0],user=r[1];
+    if(!db||!user){setStatus("local");return null;}
+    return user.id().then(function(id){
+      if(!id){setStatus("local");return null;}
+      dbCol=db.collection("data/users/"+id);
+      return dbCol.get().then(function(snap){
+        var haveCfg=false,remote={};
+        snap.docs.forEach(function(d){
+          var data=d.data()||{};
+          if(d.id==="cfg"&&Array.isArray(data.tasks)&&data.tasks.length){
+            S.tasks=data.tasks;S.ver=data.v||1;haveCfg=true;
+            if(data.recov)S.recov=data.recov;
+            if(data.set)S.set=data.set;
+          }else if(d.id.indexOf("w-")===0){
+            remote[d.id.slice(2)]=1;
+            var dn=data.done||{};Object.keys(dn).forEach(function(k){S.done[k]=dn[k];});
+            var pk=data.picks||{};Object.keys(pk).forEach(function(k){S.picks[k]=pk[k];});
+          }
+        });
+        if(!haveCfg)dirtyCfg=true;
+        if(migrate())dirtyCfg=true;
+        Object.keys(S.done).forEach(function(k){var w=weekOf(k);if(!remote[w]&&S.done[k].length)dirtyWeeks[w]=1;});
+        Object.keys(S.picks).forEach(function(k){var w=weekOf(k);if(!remote[w]&&Object.keys(S.picks[k]).length)dirtyWeeks[w]=1;});
+        persistLocal();
+        setStatus("cloud");
+        if(dirtyCfg||Object.keys(dirtyWeeks).length){setStatus("saving");flush();}
+        render();
+      });
+    });
+  }).catch(function(){setStatus("local");});
+}
+
+/* ---------- actions ---------- */
+function toggle(ds,id){
+  if(ds>today())return;
+  var a=S.done[ds]||(S.done[ds]=[]),i=a.indexOf(id);
+  if(i>=0)a.splice(i,1);else{a.push(id);S.just=id;}
+  queue(weekOf(ds));render();
+}
+function pickOpt(ds,id,label){
+  if(ds>today())return;
+  var d=S.picks[ds]||(S.picks[ds]={}),a=d[id]||(d[id]=[]),i=a.indexOf(label);
+  if(i>=0)a.splice(i,1);else a.push(label);
+  if(!a.length)delete d[id];
+  queue(weekOf(ds));render();
+}
+function toggleStep(id){
+  if(S.recov[id])delete S.recov[id];else S.recov[id]=today();
+  queue();render();
+}
+function newId(){return "t"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
+function partsToText(p){return (p||[]).map(function(x){return x.n+": "+x.o.join("، ");}).join("\n");}
+function textToParts(t){
+  var out=[];
+  String(t||"").split("\n").forEach(function(line){
+    line=line.trim();if(!line)return;
+    var m=line.match(/^([^:：]+)[:：](.*)$/);
+    var n=m?m[1].trim():line,o=m?m[2].split(/[،,]/).map(function(x){return x.trim();}).filter(Boolean):[];
+    if(n)out.push({n:n,o:o});
+  });
+  return out;
+}
+function startEdit(id,cat){
+  if(id){
+    var t=S.tasks.filter(function(x){return x.id===id;})[0];if(!t)return;
+    S.edit={id:id,cat:t.cat,title:t.title,days:t.days.slice(),time:t.time||"",note:t.note||"",grp:t.grp||"am",partsText:partsToText(t.parts)};
+  }else{
+    S.edit={id:null,cat:cat&&cat!=="all"?cat:"do",title:"",days:ALL.slice(),time:"",note:"",grp:"am",partsText:""};
+  }
+  S.editErr="";S.tview="mine";S.tab="tasks";render();
+  setTimeout(function(){var f=document.getElementById("f-title");if(f)f.focus();},30);
+}
+function saveEdit(){
+  var e=S.edit;if(!e)return;
+  e.title=e.title.trim();
+  if(!e.title){S.editErr="اكتب اسم المهمة";render();return;}
+  if(!e.days.length){S.editErr="اختر يوماً واحداً على الأقل";render();return;}
+  var days=e.days.slice().sort(),timed=(e.cat==="schedule"||e.cat==="meal");
+  var parts=e.cat==="meal"?textToParts(e.partsText):null;
+  if(e.id){
+    S.tasks.forEach(function(t){if(t.id===e.id){
+      t.title=e.title;t.cat=e.cat;t.days=days;t.time=timed?e.time:"";t.note=e.note.trim();
+      if(e.cat==="tech")t.grp=e.grp;else delete t.grp;
+      if(parts)t.parts=parts;else delete t.parts;
+    }});
+  }else{
+    var nt={id:newId(),cat:e.cat,title:e.title,days:days,time:timed?e.time:"",note:e.note.trim(),createdFrom:today()};
+    if(e.cat==="tech")nt.grp=e.grp;
+    if(parts)nt.parts=parts;
+    S.tasks.push(nt);
+  }
+  S.edit=null;S.editErr="";queue();render();
+}
+function archive(id){
+  S.tasks.forEach(function(t){if(t.id===id){t.archivedFrom=today();}});
+  if(S.edit&&S.edit.id===id)S.edit=null;
+  queue();render();
+}
+function restore(id){
+  S.tasks.forEach(function(t){
+    if(t.id===id&&t.archivedFrom){t.gaps=(t.gaps||[]).concat([[t.archivedFrom,today()]]);delete t.archivedFrom;}
+  });
+  queue();render();
+}
+
+/* ---------- icons ---------- */
+function ic(p){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';}
+var I={
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  prev:ic('<path d="M9 5l7 7-7 7"/>'),next:ic('<path d="M15 5l-7 7 7 7"/>'),
+  edit:ic('<path d="M4 20h4l11-11-4-4L4 16v4z"/>'),trash:ic('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'),
+  undo:ic('<path d="M9 7L4 12l5 5M4 12h10a6 6 0 010 12"/>'),
+  today:ic('<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>'),
+  week:ic('<path d="M4 6h16M4 12h16M4 18h16"/>'),stats:ic('<path d="M5 20V11M12 20V5M19 20v-7"/>'),
+  tasks:ic('<path d="M4 7l2 2 3-3M4 17l2 2 3-3M12 8h8M12 18h8"/>'),
+  rec:ic('<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>')
+};
+
+/* ---------- views: today ---------- */
+function partsHtml(t,ds,locked){
+  if(!t.parts||!t.parts.length)return "";
+  var sel=(S.picks[ds]&&S.picks[ds][t.id])||[];
+  return '<div class="parts">'+t.parts.map(function(p){
+    return '<div class="part"><span class="pn">'+esc(p.n)+'</span><span class="po">'+p.o.map(function(o){
+      var on=sel.indexOf(o)>=0;
+      return '<button type="button" class="chip pk'+(on?" on":"")+'" data-a="pick" data-id="'+t.id+'" data-l="'+esc(o)+'"'+(locked?" disabled":"")+' aria-pressed="'+on+'">'+esc(o)+'</button>';
+    }).join("")+'</span></div>';
+  }).join("")+'</div>';
+}
+function rowHtml(t,ds,locked){
+  var d=isDone(ds,t.id);
+  return '<li class="c-'+t.cat+'"><button class="row'+(d?" done":"")+(S.just===t.id?" just":"")+'" data-a="tog" data-id="'+t.id+'"'+(locked?" disabled":"")+' aria-pressed="'+d+'">'+
+    '<span class="box">'+I.check+'</span>'+
+    '<span class="txt"><b>'+esc(t.title)+'</b>'+(t.note?'<small>'+esc(t.note)+'</small>':'')+'</span>'+
+    (t.time?'<span class="tm">'+esc(t.time)+'</span>':'')+'</button>'+(t.cat==="meal"?partsHtml(t,ds,locked):"")+'</li>';
+}
+function sectionHtml(c,ds,future,st){
+  var l=tasksFor(ds,c),coll=!!S.coll[c];
+  var h='<section class="sec c-'+c+'"><button class="sec-h" data-a="sec" data-c="'+c+'" aria-expanded="'+(!coll)+'"><h2>'+CATS[c].name+'</h2><span class="cnt">'+st[c].d+' من '+st[c].t+'</span><i class="chev'+(coll?" shut":"")+'"></i></button>';
+  if(!coll){
+    if(CATS[c].hint)h+='<div class="sec-hint">'+CATS[c].hint+'</div>';
+    if(!l.length)h+='<div class="empty">ما في مهام بهذا القسم لهذا اليوم</div>';
+    else if(c==="tech"){
+      TG.concat([{id:"",name:"أخرى"}]).forEach(function(g){
+        var gl=l.filter(function(t){return (t.grp||"")===g.id||(g.id===""&&!TG.some(function(x){return x.id===t.grp;}));});
+        if(g.id===""&&!gl.length)return;
+        if(!gl.length)return;
+        h+='<div class="sub">'+g.name+(g.when?' <span>'+g.when+'</span>':'')+'</div><ul class="list">'+gl.map(function(t){return rowHtml(t,ds,future);}).join("")+'</ul>';
+      });
+    }else h+='<ul class="list">'+l.map(function(t){return rowHtml(t,ds,future);}).join("")+'</ul>';
+  }
+  return h+'</section>';
+}
+function todayView(){
+  var ds=S.sel,d=parse(ds),isToday=ds===today(),future=ds>today();
+  var st=dayStat(ds);
+  var h='<div class="hero"><div class="hero-row"><div><div class="day">'+DAYS[d.getDay()]+'</div><div class="date">'+fmtDate(ds)+(isToday?" · اليوم":"")+'</div></div>'+
+    '<div class="navbtns"><button class="ib" data-a="dayprev" aria-label="اليوم السابق">'+I.prev+'</button>'+
+    '<button class="ib" data-a="daynext" aria-label="اليوم التالي"'+(ds>=today()?" disabled":"")+'>'+I.next+'</button></div></div>'+
+    (isToday?'':'<div style="margin-top:10px"><button class="pill" data-a="gotoday">الرجوع لليوم</button></div>')+
+    '<div class="meters">';
+  CKEYS.forEach(function(c){
+    var p=pc(st[c]);
+    h+='<div class="meter c-'+c+'"><div class="lbl"><span>'+CATS[c].name+'</span><span>'+st[c].d+'/'+st[c].t+'</span></div><div class="track"><div class="fill" style="width:'+(p==null?0:Math.round(p*100))+'%"></div></div></div>';
+  });
+  h+='</div></div>';
+  var dow=new Date().getDay();
+  if(isToday&&S.set.weeklyMsg&&(dow===6||dow===0)){
+    var w=dow===6?ymd(wkStart(new Date())):ymd(addDays(wkStart(new Date()),-7));
+    h+='<div class="banner"><span>'+(dow===6?"الأسبوع قارب يخلص. شوف مقارنتك مع الأسبوع الماضي":"ملخص أسبوعك الماضي جاهز")+'</span><button class="pill on" data-a="gostats" data-w="'+w+'">افتح الملخص</button></div>';
+  }
+  if(future)h+='<div class="notice">هذا اليوم لسا ما إجا، فما تقدر تأشّر عليه. بتقدر تشوف مهامه بس.</div>';
+  CKEYS.forEach(function(c){h+=sectionHtml(c,ds,future,st);});
+  return h;
+}
+
+/* ---------- views: week ---------- */
+function weekView(){
+  var ws=parse(S.weekView),curW=ymd(wkStart(new Date()));
+  var h='<div class="wkbar"><button class="ib" data-a="wkprev" aria-label="الأسبوع السابق">'+I.prev+'</button>'+
+    '<div class="t">'+shortDate(S.weekView)+' - '+shortDate(ymd(addDays(ws,6)))+(S.weekView===curW?' (هذا الأسبوع)':'')+'</div>'+
+    '<button class="ib" data-a="wknext" aria-label="الأسبوع التالي"'+(S.weekView>=curW?" disabled":"")+'>'+I.next+'</button></div><ul class="list">';
+  for(var i=0;i<7;i++){
+    var ds=ymd(addDays(ws,i)),fut=ds>today(),st=dayStat(ds),p=pc(st.all);
+    h+='<li><button class="daycard'+(ds===today()?" today":"")+'" data-a="goday" data-d="'+ds+'">'+
+      '<span><span class="dn">'+DAYS[i]+'</span><br><span class="dd">'+shortDate(ds)+'</span></span>'+
+      '<span class="mini">'+CKEYS.map(function(c){var q=pc(st[c]);return '<span class="track c-'+c+'"><span class="fill" style="display:block;width:'+(fut||q==null?0:Math.round(q*100))+'%;height:100%"></span></span>';}).join("")+'</span>'+
+      '<span class="pct'+(fut||p==null?" na":"")+'">'+(fut?"—":pcs(st.all))+'</span></button></li>';
+  }
+  return h+'</ul>';
+}
+
+/* ---------- views: stats ---------- */
+function weekStats(ws,upTo){
+  var out={all:{d:0,t:0},days:[]};
+  CKEYS.forEach(function(c){out[c]={d:0,t:0};});
+  for(var i=0;i<7;i++){
+    if(i>upTo){out.days.push(null);continue;}
+    var st=dayStat(ymd(addDays(ws,i)));out.days.push(st);
+    out.all.d+=st.all.d;out.all.t+=st.all.t;
+    CKEYS.forEach(function(c){out[c].d+=st[c].d;out[c].t+=st[c].t;});
+  }
+  return out;
+}
+function deltaHtml(a,b){
+  if(a==null||b==null)return '<span class="delta same">ما في أسبوع سابق للمقارنة</span>';
+  var pp=Math.round((a-b)*100);
+  if(pp>0)return '<span class="delta up">▲ +'+pp+' نقطة عن الأسبوع الماضي</span>';
+  if(pp<0)return '<span class="delta down">▼ '+Math.abs(pp)+' نقطة أقل من الأسبوع الماضي</span>';
+  return '<span class="delta same">= نفس الأسبوع الماضي</span>';
+}
+function pickN(arr,n,seed){var out=[],i=seed%arr.length;while(out.length<n&&out.length<arr.length){out.push(arr[i%arr.length]);i+=1;}return out;}
+function msgCard(pa,pb,miss,upTo,sw){
+  if(!S.set.weeklyMsg){
+    return '<div class="card"><h3>رسالة نهاية الأسبوع</h3><p class="sum" style="margin:0 0 10px">الرسالة متوقفة. لما تفعّلها، بقارن أسبوعك مع اللي قبله وبكتبلك رسالة تناسب نتيجتك.</p><button class="btn p" data-a="togmsg">فعّل الرسالة الأسبوعية</button></div>';
+  }
+  var seed=0;sw.split("").forEach(function(c){seed+=c.charCodeAt(0);});
+  var pp=(pa!=null&&pb!=null)?Math.round((pa-pb)*100):null;
+  var type,lines;
+  if(pa==null){type="steady";lines=["لسا ما في بيانات كفاية لهالأسبوع. أشّر على أول مهمة وابدأ من هناك."];}
+  else if(pp==null){type="good";lines=["هذا أول أسبوع بنقيّمه، وبداية جيدة. الأسبوع الجاي بنقارن."].concat(pa>=0.7?["نسبتك "+Math.round(pa*100)+"% وهذا أساس قوي."]:[]);}
+  else if(pp>=3){type="good";lines=pickN(MSG_GOOD,2,seed);}
+  else if(pp<=-3){type="down";lines=pickN(MSG_DOWN,2,seed);}
+  else {type="steady";lines=pa>=0.8?[MSG_STEADY[0],"ونسبتك العالية "+Math.round(pa*100)+"% تستاهل التقدير."]:pickN(MSG_STEADY,1,seed);}
+  var h='<div class="card msg '+type+'"><h3>رسالة نهاية الأسبوع</h3>'+
+    (upTo<6?'<div class="sec-hint" style="margin:0 0 8px">تقييم مؤقت لحد اليوم، والرسالة النهائية بتكون بعد السبت.</div>':'')+
+    lines.map(function(l){return '<p class="sum">'+esc(l)+'</p>';}).join("");
+  if(type==="down"){
+    h+='<div class="boost"><b>أشياء ترفع معنوياتك هسا:</b><ul>'+pickN(BOOST,5,seed).map(function(b){return '<li>'+esc(b)+'</li>';}).join("")+'</ul>';
+    h+='<p class="sec-hint" style="margin:8px 0 0">وإذا حاسس بحزن أو ضغط أكبر من العادة لأكثر من أسبوعين، احكي مع أهلك أو مرشد المدرسة. هذا مش ضعف.</p></div>';
+  }
+  if(miss.length&&type!=="good"){
+    h+='<p class="sum" style="margin-top:10px"><b>ركّز الأسبوع الجاي على:</b> '+miss.slice(0,2).map(function(m){return esc(m.t.title);}).join("، و")+'. وخلّيها خطوة صغيرة.</p>';
+  }
+  h+='<button class="pill" data-a="togmsg" style="margin-top:10px">إيقاف الرسالة الأسبوعية</button></div>';
+  return h;
+}
+function statsView(){
+  var curW=ymd(wkStart(new Date()));
+  var ws=parse(S.sw),pw=addDays(ws,-7);
+  var upTo=S.sw===curW?new Date().getDay():6;
+  var cur=weekStats(ws,upTo),prev=weekStats(pw,upTo);
+  var h='<div class="wkbar"><button class="ib" data-a="swprev" aria-label="الأسبوع السابق">'+I.prev+'</button>'+
+    '<div class="t">'+shortDate(S.sw)+' - '+shortDate(ymd(addDays(ws,6)))+(S.sw===curW?' (هذا الأسبوع)':'')+'</div>'+
+    '<button class="ib" data-a="swnext" aria-label="الأسبوع التالي"'+(S.sw>=curW?" disabled":"")+'>'+I.next+'</button></div>';
+  var pa=pc(cur.all),pb=pc(prev.all);
+  var miss=[];
+  S.tasks.forEach(function(t){
+    var sc=0,dn=0;
+    for(var i=0;i<=upTo;i++){var ds=ymd(addDays(ws,i));if(applies(t,ds)){sc++;if(isDone(ds,t.id))dn++;}}
+    if(sc>0&&dn<sc)miss.push({t:t,sc:sc,dn:dn,gap:sc-dn});
+  });
+  miss.sort(function(a,b){return b.gap-a.gap||a.dn/a.sc-b.dn/b.sc;});
+  h+='<div class="card"><h3>إنجازك العام</h3><div class="big">'+(pa==null?"—":Math.round(pa*100)+'<small>%</small>')+'</div>'+deltaHtml(pa,pb);
+  h+='<div class="sec-hint" style="margin:10px 0 0">'+(upTo<6?'المقارنة مع نفس الأيام من الأسبوع الماضي ('+DAYS[0]+' حتى '+DAYS[upTo]+'). ':'')+cur.all.d+' مهمة منجزة من '+cur.all.t+'.</div></div>';
+  h+=msgCard(pa,pb,miss,upTo,S.sw);
+  h+='<div class="card"><h3>حسب القسم</h3><div class="cmp">';
+  CKEYS.forEach(function(c){
+    var a=pc(cur[c]),b=pc(prev[c]);
+    h+='<div class="c-'+c+'"><div class="name"><span>'+CATS[c].name+'</span><span>'+cur[c].d+'/'+cur[c].t+'</span></div><div class="twin">'+
+      '<div class="track"><div class="fill" style="width:'+(a==null?0:Math.round(a*100))+'%;height:100%"></div></div>'+
+      '<div class="lg"><span>هذا الأسبوع: '+(a==null?"—":Math.round(a*100)+"%")+'</span></div>'+
+      '<div class="track prev"><div class="fill" style="width:'+(b==null?0:Math.round(b*100))+'%;height:100%"></div></div>'+
+      '<div class="lg"><span>الأسبوع الماضي: '+(b==null?"—":Math.round(b*100)+"%")+'</span></div></div></div>';
+  });
+  h+='</div></div>';
+  h+='<div class="card"><h3>كل يوم</h3><div class="chart">';
+  for(var i=0;i<7;i++){
+    var c=cur.days[i],p=prev.days[i],cp=c?pc(c.all):null,pp=p?pc(p.all):null;
+    h+='<div class="col'+(c?"":" future")+'"><span class="v">'+(cp==null?"":Math.round(cp*100))+'</span><div class="bars">'+
+      (pp!=null?'<div class="ghost" style="height:'+Math.round(pp*100)+'%"></div>':'')+
+      '<div class="bar" style="height:'+(cp==null?3:Math.max(3,Math.round(cp*100)))+'%"></div></div><span class="nm">'+DAYS[i].replace("ال","")+'</span></div>';
+  }
+  h+='</div><div class="legend"><span><i style="background:var(--prim)"></i>هذا الأسبوع</span><span><i style="border:2px dashed var(--mute)"></i>الأسبوع الماضي</span></div></div>';
+  var best=-1,bi=-1;
+  cur.days.forEach(function(d,i){if(d){var p=pc(d.all);if(p!=null&&p>best){best=p;bi=i;}}});
+  var streak=0,k=0;
+  var tp=pc(dayStat(today()).all);if(tp==null||tp<0.7)k=1;
+  for(;k<90;k++){var q=pc(dayStat(ymd(addDays(new Date(),-k))).all);if(q!=null&&q>=0.7)streak++;else break;}
+  h+='<div class="card"><h3>ملخص سريع</h3><div class="facts"><div class="fact"><div class="k">أفضل يوم</div><div class="n">'+(bi<0?"—":DAYS[bi]+" "+Math.round(best*100)+"%")+'</div></div>'+
+    '<div class="fact"><div class="k">أيام متتالية فوق 70%</div><div class="n">'+streak+'</div></div></div></div>';
+  h+='<div class="card"><h3>أكثر مهام فاتتك</h3>';
+  if(!miss.length)h+='<div class="empty">ما في مهام فاتتك هذا الأسبوع</div>';
+  else h+='<ul class="list miss" style="gap:0">'+miss.slice(0,6).map(function(m){return '<li class="c-'+m.t.cat+'"><span><span class="tag">'+CATS[m.t.cat].edit+'</span>'+esc(m.t.title)+'</span><span class="c">'+m.dn+' من '+m.sc+'</span></li>';}).join("")+'</ul>';
+  h+='</div>';
+  return h;
+}
+
+/* ---------- views: tasks / guide ---------- */
+function daysLabel(d){
+  if(d.length===7)return "كل يوم";
+  if(d.slice().sort().join()==="0,1,3")return "أيام الدوام";
+  return d.slice().sort().map(function(i){return DAYS[i].replace("ال","");}).join("، ");
+}
+function formHtml(){
+  var e=S.edit,timed=(e.cat==="schedule"||e.cat==="meal");
+  return '<div class="form c-'+e.cat+'"><h3>'+(e.id?"تعديل المهمة":"مهمة جديدة")+'</h3>'+
+    '<div><label for="f-title">اسم المهمة</label><input class="inp" id="f-title" data-f="title" value="'+esc(e.title)+'" maxlength="120" autocomplete="off"></div>'+
+    '<div><label>القسم</label><div class="chips">'+CKEYS.map(function(c){return '<button type="button" class="chip c-'+c+(e.cat===c?" on":"")+'" data-a="fcat" data-c="'+c+'">'+CATS[c].name+'</button>';}).join("")+'</div></div>'+
+    '<div><label>الأيام</label><div class="chips">'+DAYS.map(function(n,i){return '<button type="button" class="chip'+(e.days.indexOf(i)>=0?" on":"")+'" data-a="fday" data-i="'+i+'">'+n.replace("ال","")+'</button>';}).join("")+'</div>'+
+    '<div style="margin-top:6px"><button type="button" class="pill" data-a="fall">كل الأيام</button> <button type="button" class="pill" data-a="fduty">أيام الدوام</button></div></div>'+
+    (timed?'<div><label for="f-time">الوقت (اختياري)</label><input class="inp" id="f-time" type="time" data-f="time" value="'+esc(e.time)+'" style="max-width:180px"></div>':'')+
+    (e.cat==="tech"?'<div><label for="f-grp">وقت التكنيك</label><select class="inp" id="f-grp" data-f="grp">'+TG.map(function(g){return '<option value="'+g.id+'"'+(e.grp===g.id?" selected":"")+'>'+g.name+'</option>';}).join("")+'</select></div>':'')+
+    (e.cat==="meal"?'<div><label for="f-parts">مكوّنات الوجبة وخياراتها (سطر لكل مكوّن، الصيغة: اسم المكوّن: خيار، خيار)</label><textarea class="inp" id="f-parts" data-f="partsText" rows="6">'+esc(e.partsText)+'</textarea></div>':'')+
+    '<div><label for="f-note">ملاحظة (اختياري)</label><input class="inp" id="f-note" data-f="note" value="'+esc(e.note)+'" maxlength="160" autocomplete="off"></div>'+
+    (S.editErr?'<div class="err" role="alert">'+esc(S.editErr)+'</div>':'')+
+    '<div style="display:flex;gap:8px"><button class="btn p" data-a="fsave">حفظ</button><button class="btn g" data-a="fcancel">إلغاء</button></div></div>';
+}
+function mineView(){
+  var h='';
+  if(S.edit)h+=formHtml();
+  else h+='<button class="btn p wide" data-a="fnew" style="margin-bottom:14px">+ إضافة مهمة</button>';
+  var fl=[["all","الكل"]].concat(CKEYS.map(function(c){return [c,CATS[c].edit==="جدول"?"الجدول":CATS[c].name];}));
+  h+='<div class="seg">'+fl.map(function(x){return '<button class="pill'+(S.filter===x[0]?" on":"")+'" data-a="filt" data-c="'+x[0]+'">'+x[1]+'</button>';}).join("")+'</div>';
+  var act=S.tasks.filter(function(t){return !t.archivedFrom&&(S.filter==="all"||t.cat===S.filter);});
+  var arc=S.tasks.filter(function(t){return t.archivedFrom&&(S.filter==="all"||t.cat===S.filter);});
+  CKEYS.forEach(function(c){
+    var l=act.filter(function(t){return t.cat===c;});
+    if(!l.length)return;
+    h+='<section class="sec c-'+c+'"><div class="sec-h2"><h2>'+CATS[c].name+'</h2><span class="cnt">'+l.length+' مهمة</span></div><ul class="list">';
+    l.forEach(function(t){
+      h+='<li><div class="erow c-'+c+'"><div class="txt"><b>'+esc(t.title)+'</b><small>'+daysLabel(t.days)+(t.time?' · '+esc(t.time):'')+'</small></div>'+
+        '<div class="acts"><button class="ib" data-a="fedit" data-id="'+t.id+'" aria-label="تعديل">'+I.edit+'</button><button class="ib" data-a="farc" data-id="'+t.id+'" aria-label="أرشفة">'+I.trash+'</button></div></div></li>';
+    });
+    h+='</ul></section>';
+  });
+  if(!act.length)h+='<div class="empty">ما في مهام بهذا القسم</div>';
+  if(arc.length){
+    h+='<section class="sec"><div class="sec-h2"><h2 style="font-size:16px">مهام مؤرشفة</h2><span class="cnt">'+arc.length+'</span></div><div class="sec-hint">ما بتنحسب بالإحصائيات من يوم الأرشفة. سجل أيامها السابقة محفوظ.</div><ul class="list">';
+    arc.forEach(function(t){
+      h+='<li><div class="erow c-'+t.cat+'" style="opacity:.8"><div class="txt"><b>'+esc(t.title)+'</b><small>'+CATS[t.cat].edit+' · أُرشفت '+fmtDate(t.archivedFrom)+'</small></div><div class="acts"><button class="ib" data-a="frest" data-id="'+t.id+'" aria-label="استعادة">'+I.undo+'</button></div></div></li>';
+    });
+    h+='</ul></section>';
+  }
+  h+='<div class="card" style="margin-top:16px"><h3>الرسالة الأسبوعية</h3><p class="sum" style="margin:0 0 10px">بقارن أسبوعك مع اللي قبله وبكتبلك رسالة تشجيع، ولو كانت النتيجة أقل بكتبلك أشياء ترفع معنوياتك.</p><button class="btn '+(S.set.weeklyMsg?"g":"p")+'" data-a="togmsg">'+(S.set.weeklyMsg?"مفعّلة، اضغط للإيقاف":"متوقفة، اضغط للتفعيل")+'</button></div>';
+  return h;
+}
+function guideView(){
+  var hr=new Date().getHours();
+  var h='<div class="notice">دليل التكنيكات مقسّم حسب وقت الاستخدام. التكنيكات اللي ما تكررت بقسم ثاني موجودة كمهام بقسم «تكنيكات» باليوم. المصادر مكتوبة من الذاكرة ولم أتحقق منها بالبحث، فتأكد منها في Google Scholar. القسم المفتوح هو الأنسب لوقتك الآن.</div>';
+  TG.forEach(function(g){
+    var items=TECH.filter(function(x){return x.g===g.id;});
+    var now=g.from!=null&&(g.from<g.to?(hr>=g.from&&hr<g.to):(hr>=g.from||hr<g.to));
+    h+='<details class="tg"'+(now?' open':'')+'><summary><span class="gn">'+g.name+'</span><span class="gw">'+g.when+'</span>'+(now?'<span class="nowtag">الآن</span>':'')+'<span class="gc">'+items.length+'</span></summary><ul class="list">';
+    items.forEach(function(x){
+      h+='<li class="tc"><b>'+esc(x.t)+'</b><div class="tw"><span>لأيش:</span> '+esc(x.w)+'</div><div class="th"><span>كيف:</span> '+esc(x.h)+'</div><div class="ts">المصدر: '+esc(x.s)+(x.nt?' · موجودة بقسم آخر':'')+'</div></li>';
+    });
+    h+='</ul></details>';
+  });
+  return h;
+}
+function tasksView(){
+  return '<div class="seg"><button class="pill'+(S.tview==="mine"?" on":"")+'" data-a="tv" data-v="mine">مهامي</button><button class="pill'+(S.tview==="guide"?" on":"")+'" data-a="tv" data-v="guide">دليل التكنيكات</button></div>'+(S.tview==="guide"?guideView():mineView());
+}
+
+/* ---------- views: recovery ---------- */
+function stageInfo(plan){
+  var cur=-1,stages=plan.stages.map(function(st,i){
+    var d=st.steps.filter(function(_,j){return S.recov[st.id+"-"+j];}).length;
+    return {st:st,d:d,t:st.steps.length,full:d===st.steps.length};
+  });
+  for(var i=0;i<stages.length;i++){if(!stages[i].full){cur=i;break;}}
+  return {list:stages,cur:cur};
+}
+function recovView(){
+  var plan=RECOV[S.rtab],info=stageInfo(plan);
+  var tot=0,dn=0;info.list.forEach(function(s){tot+=s.t;dn+=s.d;});
+  var h='<div class="hero"><div class="day" style="font-size:30px">خطة التعافي</div><div class="date">'+dn+' من '+tot+' خطوة بهذا القسم</div>'+
+    '<div class="track" style="margin-top:12px"><div class="fill" style="width:'+(tot?Math.round(dn/tot*100):0)+'%;background:var(--prim);height:100%"></div></div></div>';
+  h+='<div class="seg"><button class="pill'+(S.rtab==="body"?" on":"")+'" data-a="rt" data-v="body">القسم الجسدي</button><button class="pill'+(S.rtab==="mind"?" on":"")+'" data-a="rt" data-v="mind">القسم النفسي</button></div>';
+  h+='<div class="notice">'+esc(plan.intro)+'</div>';
+  info.list.forEach(function(x,i){
+    var st=x.st,isCur=i===info.cur;
+    var open=S.ropen[st.id]!=null?S.ropen[st.id]:isCur;
+    h+='<details class="tg stage c-rec" data-sid="'+st.id+'"'+(open?" open":"")+'><summary><span class="gn">'+esc(st.name)+'</span><span class="gw">'+esc(st.wk)+'</span>'+
+      (isCur?'<span class="nowtag">الحالية</span>':x.full?'<span class="donetag">خلصت</span>':'')+'<span class="gc">'+x.d+'/'+x.t+'</span></summary>'+
+      '<div class="sec-hint" style="margin:0 16px 8px">'+esc(st.goal)+'</div><ul class="list" style="padding:0 12px 12px">';
+    st.steps.forEach(function(s,j){
+      var id=st.id+"-"+j,d=!!S.recov[id];
+      h+='<li class="c-rec"><button class="row'+(d?" done":"")+'" data-a="rstep" data-id="'+id+'" aria-pressed="'+d+'"><span class="box">'+I.check+'</span><span class="txt"><b>'+esc(s)+'</b></span></button></li>';
+    });
+    h+='</ul></details>';
+  });
+  if(S.rtab==="mind"){
+    h+='<div class="card"><h3>أدوات تهدئة سريعة</h3><ul class="list" style="gap:10px">'+CALM.map(function(c){return '<li class="tc"><b>'+esc(c.t)+'</b><div class="th">'+esc(c.h)+'</div></li>';}).join("")+'</ul></div>';
+    h+='<div class="card help"><h3>متى تطلب مساعدة؟</h3><p class="sum" style="margin:0 0 8px">كلّم أهلك أو مرشد المدرسة أو طبيب إذا لاحظت:</p><ul style="margin:0;padding-inline-start:20px">'+HELP.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'+
+      '<p class="sum" style="margin:10px 0 0"><b>إذا خطرت لك أفكار لإيذاء نفسك:</b> قول لشخص قريب منك الآن، أو توجه لأقرب مستشفى أو جهة طوارئ. طلب المساعدة قوة وهو أهم من أي علامة.</p></div>';
+  }else{
+    h+='<div class="card"><h3>ملاحظات الأكل</h3><ul style="margin:0;padding-inline-start:20px"><li>اهدف لـ 5 حصص فاكهة وخضار باليوم (400 غم على الأقل).</li><li>قلّل السكر المضاف والملح (أقل من 5 غم باليوم) والدهون المشبعة.</li><li>فضّل الحبوب الكاملة والبقوليات والمكسرات.</li><li>ما بنعد سعرات هون ولا في حمية. الهدف أكل منتظم ومتوازن.</li></ul></div>';
+  }
+  h+='<div class="sec-hint" style="margin:8px 4px">'+esc(plan.src)+'</div>';
+  return h;
+}
+
+/* ---------- render ---------- */
+function render(){
+  var app=document.getElementById("app");
+  var v={today:todayView,week:weekView,stats:statsView,tasks:tasksView,rec:recovView}[S.tab]();
+  app.innerHTML='<div class="topline"><span>متابع دراسة التوجيهي</span><span id="stat">'+statusHtml()+'</span></div>'+v;
+  var tabs=[["today","اليوم",I.today],["week","الأسبوع",I.week],["stats","الإحصائيات",I.stats],["tasks","المهام",I.tasks],["rec","التعافي",I.rec]];
+  document.getElementById("tabs").innerHTML=tabs.map(function(t){return '<button data-a="tab" data-t="'+t[0]+'" class="'+(S.tab===t[0]?"on":"")+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+t[2]+'<span>'+t[1]+'</span></button>';}).join("");
+  S.just=null;
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click",function(ev){
+  var b=ev.target.closest("[data-a]");if(!b||b.disabled)return;
+  var a=b.getAttribute("data-a");
+  switch(a){
+    case "tab":S.tab=b.getAttribute("data-t");if(S.tab==="stats")S.sw=ymd(wkStart(new Date()));window.scrollTo(0,0);render();break;
+    case "tog":toggle(S.sel,b.getAttribute("data-id"));break;
+    case "pick":pickOpt(S.sel,b.getAttribute("data-id"),b.getAttribute("data-l"));break;
+    case "sec":var c=b.getAttribute("data-c");S.coll[c]=!S.coll[c];render();break;
+    case "dayprev":S.sel=ymd(addDays(parse(S.sel),-1));render();break;
+    case "daynext":if(S.sel<today()){S.sel=ymd(addDays(parse(S.sel),1));render();}break;
+    case "gotoday":S.sel=today();render();break;
+    case "goday":S.sel=b.getAttribute("data-d");S.tab="today";window.scrollTo(0,0);render();break;
+    case "gostats":S.sw=b.getAttribute("data-w");S.tab="stats";window.scrollTo(0,0);render();break;
+    case "wkprev":S.weekView=ymd(addDays(parse(S.weekView),-7));render();break;
+    case "wknext":if(S.weekView<ymd(wkStart(new Date()))){S.weekView=ymd(addDays(parse(S.weekView),7));render();}break;
+    case "swprev":S.sw=ymd(addDays(parse(S.sw),-7));render();break;
+    case "swnext":if(S.sw<ymd(wkStart(new Date()))){S.sw=ymd(addDays(parse(S.sw),7));render();}break;
+    case "togmsg":S.set.weeklyMsg=!S.set.weeklyMsg;queue();render();break;
+    case "tv":S.tview=b.getAttribute("data-v");render();break;
+    case "rt":S.rtab=b.getAttribute("data-v");render();break;
+    case "rstep":toggleStep(b.getAttribute("data-id"));break;
+    case "filt":S.filter=b.getAttribute("data-c");render();break;
+    case "fnew":startEdit(null,S.filter);break;
+    case "fedit":startEdit(b.getAttribute("data-id"));window.scrollTo(0,0);break;
+    case "farc":archive(b.getAttribute("data-id"));break;
+    case "frest":restore(b.getAttribute("data-id"));break;
+    case "fcat":S.edit.cat=b.getAttribute("data-c");render();break;
+    case "fday":var i=+b.getAttribute("data-i"),p=S.edit.days.indexOf(i);if(p>=0)S.edit.days.splice(p,1);else S.edit.days.push(i);render();break;
+    case "fall":S.edit.days=ALL.slice();render();break;
+    case "fduty":S.edit.days=DUTY.slice();render();break;
+    case "fsave":saveEdit();break;
+    case "fcancel":S.edit=null;S.editErr="";render();break;
+  }
+});
+document.addEventListener("input",function(ev){
+  var f=ev.target.getAttribute&&ev.target.getAttribute("data-f");
+  if(f&&S.edit)S.edit[f]=ev.target.value;
+});
+document.addEventListener("change",function(ev){
+  var f=ev.target.getAttribute&&ev.target.getAttribute("data-f");
+  if(f&&S.edit)S.edit[f]=ev.target.value;
+});
+document.addEventListener("toggle",function(ev){
+  var el=ev.target;
+  if(el&&el.getAttribute&&el.getAttribute("data-sid"))S.ropen[el.getAttribute("data-sid")]=el.open;
+},true);
+document.addEventListener("keydown",function(ev){
+  if(ev.key==="Enter"&&S.edit&&ev.target.classList&&ev.target.classList.contains("inp")&&ev.target.tagName!=="TEXTAREA"){ev.preventDefault();saveEdit();}
+});
+
+/* ---------- start ---------- */
+render();
+initDb();
+})();
+
+</script>
+</body>
+</html>
