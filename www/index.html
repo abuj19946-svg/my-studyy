@@ -158,7 +158,7 @@ details.tg[open] summary::after{transform:rotate(-135deg)}
 .tc .tw span,.tc .th span{color:var(--prim);font-weight:700}
 .tc .ts{font-size:12.5px;color:var(--mute);margin-top:6px;direction:rtl}
 /* nav */
-nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surf);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surf);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
 nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border-radius:12px;color:var(--mute);font-size:11.5px;min-height:52px}
 nav.tabs button svg{width:22px;height:22px}
 nav.tabs button.on{color:var(--prim);font-weight:700}
@@ -683,6 +683,7 @@ var I={
   today:ic('<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>'),
   week:ic('<path d="M4 6h16M4 12h16M4 18h16"/>'),stats:ic('<path d="M5 20V11M12 20V5M19 20v-7"/>'),
   tasks:ic('<path d="M4 7l2 2 3-3M4 17l2 2 3-3M12 8h8M12 18h8"/>'),
+  ex:ic('<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>'),
   rec:ic('<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>')
 };
 
@@ -991,12 +992,22 @@ function recovView(){
   return h;
 }
 
+function exView(){
+  var rows=[[0,"06:10","مشي سريع أو جولة تمارين (حسب أسبوعك)"],[1,"06:10","مشي سريع أو جولة تمارين (حسب أسبوعك)"],[2,"06:45","مشي سريع أو جولة تمارين (حسب أسبوعك)"],[3,"06:10","مشي سريع أو جولة تمارين (حسب أسبوعك)"],[4,"07:15","30 دقيقة مشي أو جري خفيف"],[5,"","راحة كاملة (أو كورة مع الأصحاب إذا بدك)"],[6,"18:00","مشي خفيف 20 دقيقة"]];
+  var h='<div class="hero"><div class="day" style="font-size:30px">جدول التمارين</div><div class="date">بيبني تدريجياً وما بهلك. الصبح أحسن إلك.</div></div>';
+  h+='<div class="card"><h3>جدول الأسبوع</h3><ul class="list miss" style="gap:0">'+rows.map(function(r){return '<li><span><b>'+DAYS[r[0]]+'</b> '+esc(r[2])+'</span><span class="c">'+(r[1]||"—")+'</span></li>';}).join("")+'</ul></div>';
+  h+='<div class="card"><h3>كم تتمرن حسب أسبوعك</h3><ul style="margin:0;padding-inline-start:20px"><li><b>أسبوع 1-2:</b> مشي سريع 15 دقيقة + تمدد 5 دقائق.</li><li><b>أسبوع 3-4:</b> جولة تمارين وزن الجسم، حوالي 20 دقيقة.</li><li><b>من أسبوع 5:</b> 25-30 دقيقة: جولتين أو 3، أو جري خفيف متقطع.</li></ul></div>';
+  h+='<div class="card"><h3>الجولة</h3><ul style="margin:0;padding-inline-start:20px"><li>10 سكوات</li><li>8 ضغط (ع الركبتين إذا صعب)</li><li>20 ثانية بلانك</li><li>10 طعنات لكل رجل</li></ul><p class="sum" style="margin:8px 0 0">ابدأ بجولة وحدة، وزد جولة كل أسبوعين.</p></div>';
+  h+='<div class="card"><h3>قواعد بسيطة</h3><ul style="margin:0;padding-inline-start:20px"><li>سخّن 3 دقائق قبل، واشرب ماء بعد.</li><li>إذا تعبان أو مريض أو نمت قليل: امشِ بس.</li><li>زد الحمل شوي كل أسبوع، مش مرة وحدة.</li><li>إذا حسيت بألم مستمر أو دوخة، وقّف واسأل طبيب.</li><li>الجمعة راحة بدون ذنب. الاستمرار أهم من الشدة.</li></ul></div>';
+  return h;
+}
+
 /* ---------- render ---------- */
 function render(){
   var app=document.getElementById("app");
-  var v={today:todayView,week:weekView,stats:statsView,tasks:tasksView,rec:recovView}[S.tab]();
+  var v={today:todayView,week:weekView,stats:statsView,tasks:tasksView,rec:recovView,ex:exView}[S.tab]();
   app.innerHTML='<div class="topline"><span>متابع دراسة التوجيهي</span><span id="stat">'+statusHtml()+'</span></div>'+v;
-  var tabs=[["today","اليوم",I.today],["week","الأسبوع",I.week],["stats","الإحصائيات",I.stats],["tasks","المهام",I.tasks],["rec","الأساسيات",I.rec]];
+  var tabs=[["today","اليوم",I.today],["week","الأسبوع",I.week],["ex","التمارين",I.ex],["stats","الإحصائيات",I.stats],["tasks","المهام",I.tasks],["rec","الأساسيات",I.rec]];
   document.getElementById("tabs").innerHTML=tabs.map(function(t){return '<button data-a="tab" data-t="'+t[0]+'" class="'+(S.tab===t[0]?"on":"")+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+t[2]+'<span>'+t[1]+'</span></button>';}).join("");
   S.just=null;
 }
