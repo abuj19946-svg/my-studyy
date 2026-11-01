@@ -12,7 +12,7 @@
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
   --bg:#EDF2F4; --surf:#FFFFFF; --ink:#16282F; --mute:#566B73; --line:#D2DDE2;
-  --sched:#3553A0; --do:#1B7F65; --avoid:#A33F58; --prim:#0F6C7A; --tech:#6B49A8; --meal:#A66A00;
+  --sched:#3553A0; --do:#1B7F65; --avoid:#A33F58; --prim:#0F6C7A; --tech:#6B49A8; --meal:#A66A00; --scr:#B4531A;
   --good:#1B7F65; --bad:#B0431F; --soft:#E4ECEF;
   --f-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,"Noto Sans Arabic",sans-serif;
   --f-head:"Reem Kufi","IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
@@ -20,13 +20,13 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#0E1A1F; --surf:#172830; --ink:#E7EFF2; --mute:#97ABB3; --line:#2B3D45;
-    --sched:#93ABF2; --do:#5CCBAA; --avoid:#F092A8; --prim:#62C6D4; --tech:#B79CF0; --meal:#E4B04F;
+    --sched:#93ABF2; --do:#5CCBAA; --avoid:#F092A8; --prim:#62C6D4; --tech:#B79CF0; --meal:#E4B04F; --scr:#F0A070;
     --good:#5CCBAA; --bad:#F3A27A; --soft:#1F323A;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0E1A1F; --surf:#172830; --ink:#E7EFF2; --mute:#97ABB3; --line:#2B3D45;
-  --sched:#93ABF2; --do:#5CCBAA; --avoid:#F092A8; --prim:#62C6D4; --tech:#B79CF0; --meal:#E4B04F;
+  --sched:#93ABF2; --do:#5CCBAA; --avoid:#F092A8; --prim:#62C6D4; --tech:#B79CF0; --meal:#E4B04F; --scr:#F0A070;
   --good:#5CCBAA; --bad:#F3A27A; --soft:#1F323A;
 }
 *,*::before,*::after{box-sizing:inherit}
@@ -197,6 +197,26 @@ details.stage .row{margin:0}
 textarea.inp{resize:vertical;min-height:120px;line-height:1.6}
 select.inp{appearance:auto}
 .hero .track{height:8px;border-radius:99px;background:var(--soft);overflow:hidden}
+.c-screen{--c:var(--scr)}
+.nowc{background:var(--surf);border:2px solid var(--sched);border-radius:16px;padding:12px 14px;margin-bottom:14px}
+.nowc .k{font-size:13px;color:var(--sched);font-weight:700}
+.nowc .nx{font-size:13.5px;color:var(--mute);margin-top:8px}
+.jump{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px}
+.jump .pill{white-space:nowrap;flex:none}
+.wl{display:inline-block;margin:4px 0 0 6px;padding:5px 12px;border-radius:999px;border:1px solid var(--prim);color:var(--prim);text-decoration:none;font-size:14px}
+.watch{margin:0 16px 8px;font-size:14px}
+@media (min-width:1000px){
+body{padding-inline-end:190px}
+.wrap{width:100%;max-width:1180px;padding:24px 32px 40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 28px;align-items:start}
+.wrap>*{grid-column:1/-1;min-width:0}
+.wrap>section.sec{grid-column:auto}
+nav.tabs{top:0;bottom:0;inset-inline-start:auto;inset-inline-end:0;left:auto;right:0;width:190px;grid-template-columns:1fr;grid-auto-rows:min-content;align-content:start;gap:6px;padding:24px 12px;border-top:0;border-inline-start:1px solid var(--line)}
+nav.tabs button{flex-direction:row;justify-content:flex-start;gap:12px;font-size:16px;padding:10px 14px}
+nav.tabs button.on{background:var(--soft)}
+.hero .day{font-size:44px}
+.row,.erow{transition:background .12s}
+.row:hover:not([disabled]){background:var(--soft)}
+}
 </style>
 </head>
 <body>
@@ -206,16 +226,17 @@ select.inp{appearance:auto}
 (function(){
 "use strict";
 var LS="tawjihi-tracker-v1";
-var VER=2;
+var VER=4;
 var DAYS=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
 var CATS={
   schedule:{name:"الجدول",edit:"جدول",hint:""},
   meal:{name:"الوجبات",edit:"وجبة",hint:"الهدف: 5 حصص فاكهة وخضار باليوم على الأقل، مع سكر وملح أقل. اضغط على الخيارات اللي أخذتها، وبعدين أشّر على الوجبة."},
+  screen:{name:"التقنية",edit:"تقنية",hint:"الكمبيوتر: 5 فيديوهات ترفيه توزعهم متى بدك، و3 فيديوهات تعليمية. التلفون بأوقات محددة بس."},
   "do":{name:"لازم أسوّي",edit:"أسوّي",hint:"أشياء تأشّر عليها لما تسوّيها"},
   tech:{name:"تكنيكات",edit:"تكنيك",hint:"تكنيكات الدراسة والتركيز مقسّمة حسب وقتها. أشّر لما تطبّقها."},
   avoid:{name:"لازم أتجنب",edit:"أتجنب",hint:"أشياء تأشّر عليها لما تتجنبها طول اليوم"}
 };
-var CKEYS=["schedule","meal","do","tech","avoid"];
+var CKEYS=["schedule","meal","do","screen","tech","avoid"];
 var TG=[
   {id:"am",name:"الصباح",when:"فور الاستيقاظ",from:5,to:10},
   {id:"pre",name:"قبل الجلسة",when:"قبل ما تبدأ الدراسة",from:10,to:15},
@@ -228,7 +249,7 @@ var TG=[
 ];
 
 /* ---------- techniques (guide + tasks) ---------- */
-var DUTY=[0,1,3],TUE=[2],THU=[4],FRI=[5],SAT=[6],ALL=[0,1,2,3,4,5,6];
+var NOFRI=[0,1,2,3,4,6],DUTY=[0,1,3],TUE=[2],THU=[4],FRI=[5],SAT=[6],ALL=[0,1,2,3,4,5,6];
 var TECH=[
  {g:"am",t:"التعرض للضوء الطبيعي",w:"لضبط الساعة البيولوجية",h:"افتح الستارة أو اطلع للشمس بعد الاستيقاظ مباشرة",s:"Roenneberg et al. (2004)",nt:1},
  {g:"am",t:"فطور متوازن مع ماء",w:"لتحسين الانتباه والذاكرة وتجنب الجفاف",h:"بروتين + خبز كامل + فاكهة، وكاسة ماء",s:"Adolphus et al. (2013)؛ Armstrong et al. (2012)",nt:1},
@@ -257,15 +278,15 @@ var TECH=[
  {g:"night",t:"إضاءة خافتة دافئة آخر ساعة",w:"لتقليل تثبيط الميلاتونين",h:"خفّض إضاءة الغرفة آخر ساعة قبل النوم",s:"Gooley et al. (2011)"},
  {g:"night",t:"ابتعد عن الشاشات 45 دقيقة",w:"لأن الشاشات تثبّط الميلاتونين وتؤخر النوم",h:"دش، قراءة خفيفة، تأمل",s:"Chang et al. (2015)",nt:1},
  {g:"night",t:"10 دقائق يقظة ذهنية (Mindfulness)",w:"لتحسين الذاكرة العاملة وتقليل شرود الذهن",h:"تنفس بهدوء وركّز على أنفاسك",s:"Mrazek et al. (2013)",nt:1},
- {g:"night",t:"نوم 8 ساعات بموعد ثابت",w:"لتثبيت الذاكرة وتحسين الأداء",h:"نوم بحدود 22:15، وحافظ على الموعد بالعطلة (فرق ساعة تقريباً)",s:"Diekelmann & Born (2010)؛ Paruthi et al. (2016)؛ Wittmann et al. (2006)",nt:1},
+ {g:"night",t:"نوم 8 ساعات بموعد ثابت",w:"لتثبيت الذاكرة وتحسين الأداء",h:"نوم بحدود 22:00، والجمعة استثناء: سهّر وارجع لموعدك السبت",s:"Diekelmann & Born (2010)؛ Paruthi et al. (2016)؛ Wittmann et al. (2006)",nt:1},
  {g:"night",t:"الأخبار مرتين بس باليوم",w:"لتقليل التوتر الحاد من التصفح المتواصل",h:"10 دقائق ظهراً و10 مساءً، ولا قبل النوم ولا قبل الدراسة",s:"Holman, Garfin & Silver (2014)",nt:1},
  {g:"night",t:"لا كافيين بعد 16:00",w:"لأن الكافيين المتأخر يقلل النوم",h:"قاعدة 6 ساعات قبل النوم",s:"Drake et al. (2013)",nt:1},
- {g:"weekly",t:"امتحان تدريبي مؤقّت",w:"لتدريب الاسترجاع بظروف شبيهة بالامتحان",h:"صباح الجمعة، ساعتان، من أسئلة سنوات سابقة، وتصحيحه السبت",s:"Dunlosky et al. (2013)",d:FRI},
- {g:"weekly",t:"مراجعة أسبوعية",w:"لتصحيح الامتحان وتعديل الخطة",h:"السبت: صحح امتحان الجمعة وخطط للأسبوع الجاي وشوف إحصائياتك هون",s:"Metcalfe (2017)",nt:1},
- {g:"weekly",t:"راحة حقيقية",w:"لحماية نفسك من الإرهاق",h:"بعد ظهر الجمعة: عائلة، أصدقاء، هواية، طبيعة",s:"Sonnentag & Fritz (2007)",nt:1},
+ {g:"weekly",t:"امتحان تدريبي مؤقّت",w:"لتدريب الاسترجاع بظروف شبيهة بالامتحان",h:"صباح السبت، ساعتان، من أسئلة سنوات سابقة، وتصحيحه بنفس اليوم",s:"Dunlosky et al. (2013)",d:SAT},
+ {g:"weekly",t:"مراجعة أسبوعية",w:"لتصحيح الامتحان وتعديل الخطة",h:"السبت: صحح الامتحان التدريبي وخطط للأسبوع الجاي وشوف إحصائياتك هون",s:"Metcalfe (2017)",nt:1},
+ {g:"weekly",t:"راحة حقيقية",w:"لحماية نفسك من الإرهاق",h:"الجمعة كاملة: أصدقاء، سهر، هواية، طبيعة بدون دراسة",s:"Sonnentag & Fritz (2007)",nt:1},
  {g:"weekly",t:"مراجعة الخطة كل 4-6 أسابيع",w:"لتعرف أي مادة تتأخر",h:"عدّل توزيع المواد على الجلسات حسب نتائجك",s:"—",nt:1},
- {g:"exam",t:"كتابة المخاوف 10 دقائق",w:"لتخفيف قلق الامتحان وتحسين الأداء عند القلقين",h:"اكتب مخاوفك قبل الامتحان التدريبي بـ 10 دقائق",s:"Ramirez & Beilock (2011)",d:FRI},
- {g:"exam",t:"إعادة تفسير التوتر كطاقة",w:"لتحسين الأداء تحت الضغط",h:"قل لنفسك: جسمي يستعد",s:"Jamieson et al. (2010)",d:FRI},
+ {g:"exam",t:"كتابة المخاوف 10 دقائق",w:"لتخفيف قلق الامتحان وتحسين الأداء عند القلقين",h:"اكتب مخاوفك قبل الامتحان التدريبي بـ 10 دقائق",s:"Ramirez & Beilock (2011)",d:SAT},
+ {g:"exam",t:"إعادة تفسير التوتر كطاقة",w:"لتحسين الأداء تحت الضغط",h:"قل لنفسك: جسمي يستعد",s:"Jamieson et al. (2010)",d:SAT},
  {g:"exam",t:"نوم كافٍ بدل الحشو الليلي",w:"لأن الحرمان من النوم يضعف الأداء بالامتحان",h:"لا تسهر قبل الامتحان لدراسة أكثر",s:"Gillen-O'Neel et al. (2013)؛ Pilcher & Walters (1997)",nt:1},
  {g:"long",t:"بناء العادة",w:"لتثبيت النظام",h:"متوسط 66 يوماً (المدى 18-254)، ولا تغيّر كل شي مرة وحدة",s:"Lally et al. (2010)",nt:1},
  {g:"long",t:"لو فاتك يوم ارجع فوراً",w:"لأن يوم واحد ما يكسر العادة",h:"ارجع للخطة بالصباح اللي بعده",s:"Lally et al. (2010)",nt:1},
@@ -302,7 +323,7 @@ function newSeeds(cf){
   var t=[];
   TECH.forEach(function(x,i){
     if(x.nt)return;
-    t.push({id:"tk"+i,cat:"tech",grp:x.g,title:x.t,days:(x.d||ALL).slice(),time:"",note:x.h,createdFrom:cf});
+    t.push({id:"k3"+i,cat:"tech",grp:x.g,title:x.t,days:(x.d||ALL).slice(),time:"",note:x.h,createdFrom:cf});
   });
   MEALS.forEach(function(m){
     t.push({id:m.id,cat:"meal",title:m.title,days:ALL.slice(),time:m.time,note:m.note,parts:JSON.parse(JSON.stringify(m.parts)),createdFrom:cf});
@@ -312,45 +333,18 @@ function newSeeds(cf){
 
 /* ---------- base seeds ---------- */
 var seedN=0;
-function mk(cat,days,time,title,note){seedN++;return {id:"s"+seedN,cat:cat,title:title,days:days,time:time||"",note:note||"",createdFrom:"2000-01-01"};}
+var SEEDFROM="2000-01-01";
+function mk(cat,days,time,title,note){seedN++;return {id:"v3s"+seedN,cat:cat,title:title,days:days,time:time||"",note:note||"",createdFrom:SEEDFROM};}
 function seeds(){
   seedN=0;var t=[];
-  t.push(mk("schedule",DUTY,"06:15","استيقاظ، ماء، ضوء طبيعي، فطور","بروتين وكربوهيدرات بطيئة"));
-  t.push(mk("schedule",DUTY,"07:30","المدرسة: ملاحظات قصيرة","حدد 3 أسئلة غير مفهومة"));
-  t.push(mk("schedule",DUTY,"14:30","غداء"));
-  t.push(mk("schedule",DUTY,"15:00","قيلولة اختيارية 20 دقيقة","لا تزيد عن 30 دقيقة، ولا بعد 16:00"));
-  t.push(mk("schedule",DUTY,"15:30","الجلسة 1 (الأصعب): رياضيات أو فيزياء","جلستان من 50 دقيقة بينهما استراحة 10 دقائق"));
-  t.push(mk("schedule",DUTY,"17:20","حركة: مشي سريع أو تمرين 30 دقيقة"));
-  t.push(mk("schedule",DUTY,"18:00","الجلسة 2: كيمياء / أحياء / مادة ثانية","جلستان من 45 دقيقة"));
-  t.push(mk("schedule",DUTY,"19:30","عشاء وعائلة","بدون دراسة"));
-  t.push(mk("schedule",DUTY,"20:30","الجلسة 3 (خفيفة)","بطاقات استرجاع، مراجعة دفتر الأخطاء، تخطيط الغد"));
-  t.push(mk("schedule",DUTY,"21:30","ابتعد عن الشاشات: دش، قراءة خفيفة، تأمل"));
-  t.push(mk("schedule",DUTY,"22:15","نوم","8 ساعات تقريباً"));
-  t.push(mk("schedule",TUE,"06:45","استيقاظ وفطور"));
-  t.push(mk("schedule",TUE,"08:00","حصة الرياضيات","حل مع المعلم ولا تكتفِ بالنسخ"));
-  t.push(mk("schedule",TUE,"10:30","استراحة وحركة"));
-  t.push(mk("schedule",TUE,"11:00","حل مسائل من نفس الحصة بدون النظر للحل","استرجاع في نفس اليوم"));
-  t.push(mk("schedule",TUE,"12:30","غداء وراحة وقيلولة"));
-  t.push(mk("schedule",TUE,"15:00","الجلسة 1: فيزياء أو مادة علمية ثانية"));
-  t.push(mk("schedule",TUE,"17:00","حركة"));
-  t.push(mk("schedule",TUE,"18:00","الجلسة 2"));
-  t.push(mk("schedule",TUE,"19:30","عشاء"));
-  t.push(mk("schedule",TUE,"20:30","مراجعة خفيفة وتخطيط"));
-  t.push(mk("schedule",TUE,"22:30","نوم"));
-  t.push(mk("schedule",THU,"07:00","استيقاظ، ضوء، فطور"));
-  t.push(mk("schedule",THU,"08:00","جلسة عميقة 1: مادة صعبة","جلستان من 50 دقيقة"));
-  t.push(mk("schedule",THU,"10:00","استراحة وحركة"));
-  t.push(mk("schedule",THU,"10:30","جلسة 2: مادة ثانية"));
-  t.push(mk("schedule",THU,"12:30","غداء وراحة وقيلولة"));
-  t.push(mk("schedule",THU,"15:00","جلسة 3: مسائل مخلوطة من عدة دروس","Interleaving"));
-  t.push(mk("schedule",THU,"17:00","رياضة أو مشي"));
-  t.push(mk("schedule",THU,"18:00","مراجعة دفتر الأخطاء"));
-  t.push(mk("schedule",FRI,"","امتحان تدريبي مؤقّت (ساعتان) صباحاً","من أسئلة سنوات سابقة بظروف شبيهة بالامتحان الحقيقي"));
-  t.push(mk("schedule",FRI,"","راحة كاملة بعد الظهر","عائلة، أصدقاء، هواية، طبيعة"));
-  t.push(mk("schedule",SAT,"","مراجعة أسبوعية صباحاً","تصحيح امتحان الجمعة"));
-  t.push(mk("schedule",SAT,"","تخطيط الأسبوع القادم"));
-  t.push(mk("schedule",SAT,"","النوم بنفس موعد أيام الدوام","عشان الأحد ما يكون صعب"));
-  t.push(mk("do",ALL,"","نمت 8 ساعات تقريباً بموعد ثابت"));
+  var EX="الأسابيع 1-2: مشي 15 د، 3-4: جولة تمارين 20 د، 5+: 25-30 د (التفاصيل بقسم التعافي)";
+  function A(d,r){r.forEach(function(x){t.push(mk("schedule",d,x[0],x[1],x[2]));});}
+  A(DUTY,[["06:00","استيقاظ، ماء، ضوء طبيعي"],["06:10","رياضة الصباح",EX],["06:45","فطور","بروتين وكربوهيدرات بطيئة"],["07:05","⭐ مراجعة سريعة 15 دقيقة","بطاقات استرجاع. ذاكرة الصباح قوية"],["07:30","المدرسة: ملاحظات قصيرة","حدد 3 أسئلة غير مفهومة"],["14:30","غداء"],["15:00","قيلولة اختيارية 20 دقيقة","لا تزيد عن 30 دقيقة، ولا بعد 16:00"],["15:30","⭐ دراسة 1: أصعب مادة (50 د)","وقت الذروة: رياضيات أو فيزياء"],["16:30","استراحة: فيديو تعليمي أو ترفيه","من قسم التقنية"],["17:00","دراسة 2 (50 د)","كيمياء / أحياء / مادة ثانية"],["18:00","دراسة 3 (45 د)","مسائل أو حفظ، المادة الأضعف"],["18:55","وقت حر: أصحاب، هواية، فيديو"],["19:30","عشاء وعائلة","بدون دراسة"],["20:15",GAP4[0],GAP4[1]],["21:15","صفحة قرآن + ابتعاد عن الشاشات","دش، قراءة خفيفة، تأمل"],["22:00","نوم","8 ساعات تقريباً"]]);
+  A(TUE,[["06:30","استيقاظ، ماء، ضوء طبيعي"],["06:45","رياضة الصباح",EX],["07:30","فطور"],["08:00","حصة الرياضيات","حل مع المعلم ولا تكتفِ بالنسخ"],["10:30","استراحة"],["11:00","⭐ حل مسائل الحصة بدون النظر للحل","وقت الذروة، استرجاع بنفس اليوم"],["12:30","غداء وقيلولة"],["15:00","دراسة 1: فيزياء أو مادة علمية (50 د)"],["16:00","استراحة وفيديو"],["16:30","دراسة 2 (50 د)"],["17:30","وقت حر"],["19:30","عشاء"],["20:30","دراسة 3 خفيفة: مراجعة وتخطيط"],["21:15","صفحة قرآن + ابتعاد عن الشاشات"],["22:00","نوم"]]);
+  A(THU,[["07:00","استيقاظ، ضوء، فطور"],["07:15","رياضة الصباح","30 دقيقة مشي أو جري خفيف"],["08:00","⭐ دراسة 1: مادة صعبة (50 د)","جلسة عميقة"],["09:10","دراسة 2 (50 د)"],["10:15","استراحة وفيديو تعليمي"],["10:45","دراسة 3: مادة ثانية (50 د)"],["12:30","غداء وقيلولة"],["15:00","دراسة 4: مسائل مخلوطة من عدة دروس (50 د)","Interleaving"],["16:30","وقت حر وأصحاب"],["18:00","مراجعة دفتر الأخطاء (30 د)"],["21:15","صفحة قرآن"],["22:30","نوم"]]);
+  A(FRI,[["","يوم راحة كامل: بدون دراسة","اليوم لك وما في ذنب"],["","أصحاب وخروج أو لعب"],["","سهر مسموح الليلة مع الأصحاب","ما بتحاسب نفسك. بس لا كافيين متأخر، وآكل منيح"],["","رياضة اختيارية (كورة أو مشي)"],["","صفحة قرآن (اختياري ولو سطور)"]]);
+  A(SAT,[["09:00","نوم زيادة ثم استيقاظ","عوّض سهرة الجمعة"],["10:30","امتحان تدريبي مؤقّت (ساعتان)","من أسئلة سنوات سابقة"],["13:30","غداء وراحة"],["16:00","تصحيح الامتحان ومراجعة أخطائه"],["17:00","تخطيط الأسبوع القادم"],["18:00","مشي خفيف 20 دقيقة"],["21:15","صفحة قرآن + ابتعاد عن الشاشات"],["22:00","نوم بموعد الدوام","عشان الأحد ما يكون صعب"]]);
+  t.push(mk("do",NOFRI,"","نمت 8 ساعات تقريباً بموعد ثابت"));
   t.push(mk("do",ALL,"","فطور + ماء"));
   t.push(mk("do",ALL,"","الجوال خارج الغرفة وقت الجلسات"));
   t.push(mk("do",ALL,"","حللت المسائل قبل ما أشوف الحل"));
@@ -365,7 +359,7 @@ function seeds(){
   t.push(mk("avoid",ALL,"","شاشات آخر 45 دقيقة قبل النوم"));
   t.push(mk("avoid",ALL,"","سكرولينج (ريلز / تيك توك) وقت الدراسة"));
   t.push(mk("avoid",ALL,"","تعدد المهام أثناء الجلسة"));
-  t.push(mk("avoid",ALL,"","السهر والحشو الليلي"));
+  t.push(mk("avoid",NOFRI,"","السهر والحشو الليلي","الجمعة ليلة سهر مسموحة"));
   t.push(mk("avoid",ALL,"","مشروبات الطاقة"));
   t.push(mk("avoid",ALL,"","الأرجيلة والسجائر والفيب"));
   t.push(mk("avoid",ALL,"","التظليل وإعادة القراءة كطريقة رئيسية"));
@@ -374,7 +368,13 @@ function seeds(){
   t.push(mk("avoid",ALL,"","الدراسة بالسرير"));
   t.push(mk("avoid",ALL,"","جلد الذات ومقارنة نفسي بزملائي"));
   t.push(mk("avoid",ALL,"","تخطي الوجبات والسكريات المصنّعة"));
-  return t.concat(newSeeds("2000-01-01"));
+  for(var i=1;i<=5;i++)t.push(mk("screen",ALL,"","كمبيوتر: فيديو ترفيه "+i+" من 5",i==1?"وزّعهم متى بدك. الأفضل بعد جلسة مش قبلها":""));
+  for(var j=1;j<=3;j++)t.push(mk("screen",ALL,"","كمبيوتر: فيديو تعليمي "+j+" من 3",j==1?"الاقتراحات تحت. 10-15 دقيقة لكل فيديو":""));
+  t.push(mk("screen",ALL,"","التلفون: 3 أوقات فحص بس","بعد الغداء، بعد الدراسة 2، قبل العشاء"));
+  t.push(mk("screen",ALL,"","التلفون: السوشيال أقل من ساعة بالمجموع"));
+  t.push(mk("do",ALL,"","قراءة صفحة قرآن","قليل ومستمر أحسن من كثير ومنقطع"));
+  t.push(mk("do",ALL,"","تصرف حسن واحد اليوم","كلمة طيبة، مساعدة، اعتذار، أو سماع حدا"));
+  return t.concat(gapTasks(),newSeeds(SEEDFROM));
 }
 
 /* ---------- recovery plan ---------- */
@@ -383,7 +383,7 @@ var RECOV={
   src:"WHO healthy diet (✓ تم التحقق)؛ Bull et al. (2020) توصيات منظمة الصحة للنشاط البدني؛ Paruthi et al. (2016) للنوم؛ Donnelly et al. (2016)؛ Drake et al. (2013). (المصادر ما عدا الأول من الذاكرة)",
   stages:[
   {id:"b1",name:"المرحلة 1: الأساسات",wk:"الأسبوع 1",goal:"نوم وأكل وماء ثابتين قبل أي شي ثاني.",steps:[
-   "حدد موعد نوم واستيقاظ ثابتين (النوم بحدود 22:15)",
+   "حدد موعد نوم واستيقاظ ثابتين (النوم بحدود 22:00)",
    "حط قارورة ماء على طاولتك واشربها خلال اليوم",
    "افطر كل يوم خلال ساعة من الاستيقاظ (بروتين + نشويات كاملة + فاكهة)",
    "اطلع للشمس 10 دقائق بالصباح",
@@ -397,7 +397,7 @@ var RECOV={
    "تمدد 5 دقائق بعد كل جلسة طويلة",
    "طبّق قاعدة 20-20-20 للعين"]},
   {id:"b3",name:"المرحلة 3: النوم العميق",wk:"الأسبوع 3",goal:"ثبّت جودة نومك لأنه أساس التركيز والذاكرة.",steps:[
-   "نفس موعد النوم حتى بالعطلة (فرق ساعة بالكثير)",
+   "نفس موعد النوم كل الأسبوع ما عدا ليلة الجمعة (سهرة مسموحة)",
    "ابتعد عن الشاشات 45 دقيقة قبل النوم",
    "إضاءة خافتة دافئة آخر ساعة",
    "غرفة مظلمة وهادئة وفيها هواء نقي",
@@ -448,6 +448,8 @@ var RECOV={
    "تواصل حقيقي مع أهلك أو صديق مرة باليوم",
    "لما تغلط اكتب: غلطت، وهذا طبيعي، شو الخطوة الجاية؟",
    "قارن نفسك بنفسك الأسبوع الماضي فقط",
+   "صفحة قرآن أو ذكر 5 دقائق يومياً للسكينة",
+   "اكتب 3 أشياء بتشكر ربنا عليها قبل النوم",
    "يوم راحة حقيقي كل أسبوع"]},
   {id:"m6",name:"المرحلة 6: ثبّت الصحة النفسية",wk:"الأسبوع 6 وما بعده",goal:"حافظ على الاستقرار وجهّز نفسك للضغط.",steps:[
    "مراجعة أسبوعية: شو رفع معنوياتي وشو أرهقني؟",
@@ -455,6 +457,24 @@ var RECOV={
    "حافظ على حدود التلفون الجديدة حتى بأسابيع الضغط",
    "اعرف علامات الطلب للمساعدة (تحت) وتذكّر إن الطلب منها قوة",
    "كافئ نفسك على كل مرحلة خلّصتها"]}
+ ]},
+ char:{name:"الشخصية والتعامل",intro:"كيف تصير شخص أفضل بأخلاقك وتعاملك مع الناس. خمس مراحل، وخطوة صغيرة كل يوم أحسن من قرار كبير. الشاهد: روابط المشاهدة هي بحث على يوتيوب وانت بتختار الفيديو.",
+  src:"مبنية على مبادئ عملية عامة بالأخلاق والتواصل، وليست من دراسة محددة.",
+  stages:[
+  {id:"c1",name:"المرحلة 1: أخلاقك مع نفسك",wk:"الأسبوع 1",goal:"الصدق والمسؤولية أساس كل علاقة.",w:[["الصدق والأمانة","الصدق والأمانة للشباب"]],steps:["قول الصدق اليوم حتى لو الكذبة أسهل","نفّذ كل وعد وعدته مهما كان صغير","اعترف بغلطتك بدون عذر وصلّحها","احفظ أمانات الناس وأسرارهم","صفحة قرآن يومياً حتى لو قليلة"]},
+  {id:"c2",name:"المرحلة 2: أهلك وبيتك",wk:"الأسبوع 2",goal:"أول مدرسة للتعامل هي البيت.",w:[["بر الوالدين","بر الوالدين كيف تحاور أهلك"]],steps:["قول لأهلك كلمة شكر أو محبة كل يوم","ساعد بشي بالبيت بدون ما يطلبوا","لما تزعل: خذ نفس وبعدين احكِ بهدوء بدون صراخ","اسمع لأهلك دقيقتين بدون ما تقاطع","اعتذر بسرعة إذا غلطت"]},
+  {id:"c3",name:"المرحلة 3: الحديث والاستماع",wk:"الأسبوع 3",goal:"الناس بتحب اللي بيسمعها قبل ما يحكي.",w:[["الاستماع الفعال","الاستماع الفعال مهارات التواصل"],["الحديث بثقة","كيف تتحدث مع الناس بثقة"],["كيف تكسب الأصدقاء","كيف تكسب الأصدقاء ملخص"]],steps:["اسمع الشخص للآخر بدون مقاطعة","اسأل سؤال عن كلامه قبل ما تحكي عن نفسك","ابدأ بالسلام والابتسامة وتذكّر اسم الشخص","قبل ما ترد على شي مزعج عدّ لـ 5","قول «أنا حاسس» بدل «إنت دايماً»","لا تحكي عن حدا من وراه بشي ما بتحكيه بوجهه"]},
+  {id:"c4",name:"المرحلة 4: الأصدقاء والخلاف",wk:"الأسبوع 4",goal:"تحافظ على صحبتك وتحط حدودك بأدب.",w:[["حل الخلافات","كيف تحل الخلافات مع الأصدقاء"],["الرفض بأدب","كيف ترفض بأدب وتضع حدود"]],steps:["اختر أصحاب بيشجعوك على الأفضل، واستمتع بسهرتك معهم الجمعة بدون ذنب","إذا اختلفت مع حدا: افصل بين الشخص والموضوع","اعتذر بدون كلمة «بس»","ارفض بهدوء وأدب الشي اللي بيضرك","ما تسخر من حدا ولا تنشر سرّه","سامح حدا أخطأ بحقك"]},
+  {id:"c5",name:"المرحلة 5: العطاء والقيم",wk:"الأسبوع 5 وما بعده",goal:"تثبّت أخلاقك وتصير قدوة.",w:[["شخصيات ملهمة","قصص شخصيات ملهمة للشباب"],["خواطر","خواطر أحمد الشقيري"]],steps:["سوّي خدمة صغيرة لحدا كل أسبوع بدون مقابل","ساعد محتاج حسب قدرتك","اشكر معلميك وكل حدا ساعدك","شوف أو اقرأ شي واحد بالأسبوع عن شخصية قدوة","كل ليلة اسأل: شو عملت صح اليوم؟ وشو بدي أحسّن؟"]}
+ ]},
+ gap:{name:"الأساسيات والثقة",intro:"أنت مش أضعف منهم، أخذت أساسيات أقل. الفجوة بتنسد بخطة مرتبة مش بدراسة أكثر. خمس مراحل، وجلسة الترميم اليومية الساعة 20:15 هي قلبها.",
+  src:"مبنية على مبادئ تعلم عامة (تشخيص الفجوات والاسترجاع والتدرج)، وروابط المشاهدة بحث على يوتيوب.",
+  stages:[
+  {id:"g1",name:"المرحلة 1: شخّص الفجوة",wk:"الأسبوع 1",goal:"قبل ما تدرس أكثر، اعرف وين الثغرات بالضبط.",w:[["أكاديمية خان بالعربي","أكاديمية خان بالعربي"]],steps:["اطلب من معلم كل مادة (أو من صاحب) أهم دروس عاشر وحادي عشر اللي بتبني عليها دروس التوجيهي","اكتب لكل مادة (رياضيات، فيزياء، كيمياء، أحياء) 5 دروس أساسية","على آخر امتحانين: فرّز كل غلطة (فجوة أساسيات، تسرّع، ما فهمت السؤال)","اعرف أي مادة فجوتها أكبر وابدأ فيها"]},
+  {id:"g2",name:"المرحلة 2: ابني الأساس",wk:"الأسبوع 2",goal:"40 دقيقة يومياً للأساسيات بدون ما تترك دروسك الحالية.",w:[["رياضيات","شرح رياضيات الصف الحادي عشر علمي"],["فيزياء","شرح فيزياء الصف الحادي عشر"],["كيمياء","شرح كيمياء الصف الحادي عشر"]],steps:["جلسة الترميم اليومية: درس صغير واحد، شرح ثم 5 أسئلة","إذا مرّ عليك بدرس حالي شي ما فهمته، ارجع للدرس الأساسي قبله 10 دقائق بس","لخّص كل درس رجعت له بـ 5 أسطر بكلماتك","اسأل معلمك أو صاحبك عن اللي ما فهمته"]},
+  {id:"g3",name:"المرحلة 3: ثبّت بالأسئلة",wk:"الأسبوع 3",goal:"الفهم بيثبت لما تحل بنفسك.",steps:["حل 10 أسئلة على كل درس أساسي قبل ما تنتقل","دفتر الأخطاء بعمودين: فجوة وتسرّع","كل 3 أيام جرّب أخطاء الفجوة من جديد بدون النظر للحل","اكتب سهم بين كل درس أساسي والدرس التوجيهي اللي بيحتاجه"]},
+  {id:"g4",name:"المرحلة 4: مهارة الامتحان",wk:"الأسبوع 4",goal:"كثير من الخراب بالامتحان من الوقت والتوتر مش بس من الأساسيات.",w:[["قلق الامتحان","قلق الامتحان كيف تتغلب عليه"]],steps:["ابدأ بالأسئلة اللي بتعرفها وارجع للصعبة","وزّع الوقت: كم دقيقة لكل سؤال قبل ما تبدأ","سؤال ما عرفته: علّم عليه وكمّل","خلّي آخر 5 دقائق لمراجعة الإجابات","قبل الامتحان بـ 10 دقائق: اكتب مخاوفك وتنفس شهيق 4 وزفير 6"]},
+  {id:"g5",name:"المرحلة 5: قِس تقدمك بنفسك",wk:"الأسبوع 5 وما بعده",goal:"الميزان الصحيح هو انت قبل شهر مش صحابك.",steps:["كل سبت اكتب: شو فهمت هالأسبوع وما كنت فاهمه قبله؟","قارن علامتك بعلامتك السابقة بنفس المادة","ادرس مع صاحبك مرة بالأسبوع: اشرحله شي وهو يشرحلك شي","اشكر صاحبك اللي بيساعدك","إذا استمر الإحباط أكثر من أسبوعين احكي مع معلم أو مرشد"]}
  ]}
 };
 var CALM=[
@@ -472,6 +492,23 @@ var HELP=[
  "أي أفكار لإيذاء نفسك"
 ];
 
+var EDU=[
+ [["الاسترجاع النشط: أقوى طريقة للحفظ","Justin Sung active recall"],["الاستماع الفعال وكيف تفهم الناس","الاستماع الفعال مهارات التواصل"],["كيف يتعلم الدماغ","TED-Ed how the brain learns"]],
+ [["تقنية فاينمان لفهم أي درس","Thomas Frank Feynman technique"],["كيف تتحكم بغضبك","كيف تتحكم بغضبك"],["شرح درس من مادتك","أكاديمية خان بالعربي فيزياء"]],
+ [["كيف توقف التسويف","Ali Abdaal procrastination"],["الصدق والأمانة وقوة الكلمة","الصدق والأمانة للشباب"],["حجم الكون بشكل مبسط","Kurzgesagt universe size"]],
+ [["أهمية النوم للحفظ","TED-Ed why sleep matters"],["كيف تكسب الأصدقاء (ملخص كارنيجي)","كيف تكسب الأصدقاء ملخص"],["الرياضيات بشكل مرئي","3Blue1Brown"]],
+ [["المراجعة المتباعدة","spaced repetition Ali Abdaal"],["بر الوالدين وكيف تحاور أهلك","بر الوالدين كيف تحاور أهلك"],["الكيمياء مبسطة","أكاديمية خان كيمياء بالعربي"]],
+ [["التركيز العميق","Thomas Frank deep work"],["فن الاعتذار والتسامح","فن الاعتذار والتسامح"],["حلقة من خواطر","خواطر أحمد الشقيري"]],
+ [["قلق الامتحان وكيف تتجاوزه","قلق الامتحان كيف تتغلب عليه"],["كيف ترفض بأدب وتحط حدود","كيف ترفض بأدب وتضع حدود"],["كيف تختار تخصصك الجامعي","كيف تختار تخصصك الجامعي"]]
+];
+var EXC='<div class="card"><h3>جدول التمارين (بيبني تدريجياً وما بهلك)</h3><ul style="margin:0;padding-inline-start:20px"><li>أيام الدوام والثلاثاء، الصبح 06:10: أسبوع 1-2 مشي سريع 15 دقيقة. أسبوع 3-4 جولة تمارين 20 دقيقة. من أسبوع 5: 25-30 دقيقة.</li><li>الخميس: 30 دقيقة مشي أو جري خفيف. السبت: مشي خفيف 20 دقيقة.</li><li>الجمعة: راحة كاملة (أو كورة مع الأصحاب إذا بدك).</li><li>الجولة: 10 سكوات، 8 ضغط (ع الركبتين إذا صعب)، 20 ثانية بلانك، 10 طعنات لكل رجل. ابدأ بجولة وحدة وزد جولة كل أسبوعين.</li><li>إذا تعبان أو مريض أو نمت قليل: امشِ بس. لا تزيد الحمل أكثر من شوي كل أسبوع.</li></ul></div>';
+var GAP4=["⭐ ترميم أساسيات (40 د)","ارجع لدرس من عاشر أو حادي عشر مرتبط بدرسك الحالي: شرح قصير ثم 5 أسئلة"];
+function gapTasks(){return [
+ {id:"v4g1",cat:"do",title:"فرزت أخطائي: فجوة أساسيات أو تسرّع",days:ALL.slice(),time:"",note:"بدفتر الأخطاء، عمودين: فجوة / تسرّع",createdFrom:SEEDFROM},
+ {id:"v4g2",cat:"do",title:"سألت معلم أو صاحب عن شي ما فهمته",days:[0,1,2,3,4],time:"",note:"السؤال مش ضعف، هذا أسرع طريق",createdFrom:SEEDFROM},
+ {id:"v4g3",cat:"do",title:"كتبت شو تحسّن عندي عن الأسبوع الماضي",days:[6],time:"",note:"قارن نفسك بنفسك مش بصحابك",createdFrom:SEEDFROM}
+];}
+var GAPC='<div class="card"><h3>لما بتقارن حالك بصحابك</h3><ul style="margin:0;padding-inline-start:20px"><li>علاماتهم الأعلى هلق بتعكس سنتين تحضير زيادة بالمنهج، مش ذكاء أكثر منك.</li><li>إنك بتدرس كثير وبتحاول هذا جهد حقيقي. النتيجة بتتأخر عن الجهد بس ما بتلغيه.</li><li>كلامهم «لأنك ما درست قبل» وصف للماضي مش حكم عليك. الماضي ما بنغيره، بس الفجوة بتنسد.</li><li>اللي بيخرب فيه بالامتحان غالباً مزيج: فجوة أساسيات، وتوتر، وإدارة وقت. كل واحد إله حل، وخطة هالقسم بتغطيهم.</li><li>صحابك بيشوفوك قادر، فاطلب منهم ملخصاتهم من عاشر وحادي عشر وادرسوا سوا مرة بالأسبوع.</li><li>الميزان الصحيح: انت اليوم مقابل انت قبل شهر.</li></ul></div>';
 /* ---------- weekly messages ---------- */
 var MSG_GOOD=[
  "ماشاء الله عليك! أسبوعك أقوى من اللي قبله، وهذا من التزامك مش من الحظ.",
@@ -514,7 +551,7 @@ function today(){return ymd(new Date());}
 /* ---------- state ---------- */
 var S={tasks:null,done:{},picks:{},recov:{},set:{weeklyMsg:true},ver:VER,tab:"today",sel:today(),
   sw:ymd(wkStart(new Date())),weekView:ymd(wkStart(new Date())),filter:"all",edit:null,editErr:"",status:"connecting",
-  just:null,coll:{},tview:"mine",rtab:"body",ropen:{}};
+  just:null,coll:{tech:true,avoid:true},tview:"mine",rtab:"body",ropen:{}};
 try{
   var raw=localStorage.getItem(LS);
   if(raw){
@@ -529,8 +566,15 @@ try{
 if(!S.tasks){S.tasks=seeds();S.ver=VER;}
 function migrate(){
   if((S.ver||1)>=VER)return false;
-  var have={};S.tasks.forEach(function(t){have[t.id]=1;});
-  newSeeds(today()).forEach(function(t){if(!have[t.id])S.tasks.push(t);});
+  var t0=today(),have={};
+  var v0=S.ver||1;
+  S.tasks.forEach(function(t){if(v0<3&&/^(s\d+|tk\d+)$/.test(t.id)){t.archivedFrom=t0;t.hid=1;}have[t.id]=1;});
+  SEEDFROM=t0;
+  if(v0<3)seeds().forEach(function(t){if(!have[t.id]){S.tasks.push(t);have[t.id]=1;}});
+  if(v0<4){
+    S.tasks.forEach(function(t){if(t.cat==="schedule"&&!t.archivedFrom&&String(t.title).indexOf("دراسة 4 خفيفة")===0){t.title=GAP4[0];t.note=GAP4[1];}});
+    gapTasks().forEach(function(t){if(!have[t.id])S.tasks.push(t);});
+  }
   S.ver=VER;return true;
 }
 migrate();
@@ -719,6 +763,25 @@ var I={
   rec:ic('<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>')
 };
 
+function nowCard(ds){
+  if(ds!==today())return "";
+  var n=new Date(),hm=pad(n.getHours())+":"+pad(n.getMinutes()),cur=null,nx=null;
+  tasksFor(ds,"schedule").forEach(function(t){if(!t.time)return;if(t.time<=hm)cur=t;else if(!nx)nx=t;});
+  if(!cur&&!nx)return "";
+  var h='<div class="nowc c-schedule">';
+  if(cur){var d=isDone(ds,cur.id);h+='<div class="k">الآن · '+esc(cur.time)+'</div><button class="row'+(d?" done":"")+'" data-a="tog" data-id="'+cur.id+'" aria-pressed="'+d+'" style="margin-top:6px"><span class="box">'+I.check+'</span><span class="txt"><b>'+esc(cur.title)+'</b>'+(cur.note?'<small>'+esc(cur.note)+'</small>':'')+'</span></button>';}
+  if(nx)h+='<div class="nx">التالي: '+esc(nx.time)+' · '+esc(nx.title)+'</div>';
+  return h+'</div>';
+}
+function yt(q){return "https://www.youtube.com/results?search_query="+encodeURIComponent(q);}
+function eduHtml(ds){
+  return '<div class="card"><h3>فيديوهات اليوم التعليمية</h3><div class="sec-hint" style="margin:0 0 6px">3 فيديوهات قصيرة (10-15 دقيقة لكل واحد) بعد الجلسات مش قبلها، وما بتأثر على دراستك. الزر بيفتح بحث على يوتيوب.</div>'+
+    EDU[parse(ds).getDay()].map(function(x){return '<div style="margin:8px 0"><b>'+esc(x[0])+'</b><br><a class="wl" target="_blank" rel="noopener" href="'+yt(x[1])+'">ابحث على يوتيوب</a></div>';}).join("")+'</div>';
+}
+function watchHtml(st){
+  if(!st.w)return "";
+  return '<div class="watch"><b>شو تشوف:</b> '+st.w.map(function(x){return '<a class="wl" target="_blank" rel="noopener" href="'+yt(x[1])+'">'+esc(x[0])+'</a>';}).join("")+'</div>';
+}
 /* ---------- views: today ---------- */
 function partsHtml(t,ds,locked){
   if(!t.parts||!t.parts.length)return "";
@@ -739,7 +802,7 @@ function rowHtml(t,ds,locked){
 }
 function sectionHtml(c,ds,future,st){
   var l=tasksFor(ds,c),coll=!!S.coll[c];
-  var h='<section class="sec c-'+c+'"><button class="sec-h" data-a="sec" data-c="'+c+'" aria-expanded="'+(!coll)+'"><h2>'+CATS[c].name+'</h2><span class="cnt">'+st[c].d+' من '+st[c].t+'</span><i class="chev'+(coll?" shut":"")+'"></i></button>';
+  var h='<section class="sec c-'+c+'" id="sec-'+c+'"><button class="sec-h" data-a="sec" data-c="'+c+'" aria-expanded="'+(!coll)+'"><h2>'+CATS[c].name+'</h2><span class="cnt">'+st[c].d+' من '+st[c].t+'</span><i class="chev'+(coll?" shut":"")+'"></i></button>';
   if(!coll){
     if(CATS[c].hint)h+='<div class="sec-hint">'+CATS[c].hint+'</div>';
     if(!l.length)h+='<div class="empty">ما في مهام بهذا القسم لهذا اليوم</div>';
@@ -767,13 +830,14 @@ function todayView(){
     h+='<div class="meter c-'+c+'"><div class="lbl"><span>'+CATS[c].name+'</span><span>'+st[c].d+'/'+st[c].t+'</span></div><div class="track"><div class="fill" style="width:'+(p==null?0:Math.round(p*100))+'%"></div></div></div>';
   });
   h+='</div></div>';
+  h+='<div class="jump">'+CKEYS.map(function(c){return '<button class="pill" data-a="jump" data-c="'+c+'">'+CATS[c].name+'</button>';}).join("")+'</div>'+nowCard(ds);
   var dow=new Date().getDay();
   if(isToday&&S.set.weeklyMsg&&(dow===6||dow===0)){
     var w=dow===6?ymd(wkStart(new Date())):ymd(addDays(wkStart(new Date()),-7));
     h+='<div class="banner"><span>'+(dow===6?"الأسبوع قارب يخلص. شوف مقارنتك مع الأسبوع الماضي":"ملخص أسبوعك الماضي جاهز")+'</span><button class="pill on" data-a="gostats" data-w="'+w+'">افتح الملخص</button></div>';
   }
   if(future)h+='<div class="notice">هذا اليوم لسا ما إجا، فما تقدر تأشّر عليه. بتقدر تشوف مهامه بس.</div>';
-  CKEYS.forEach(function(c){h+=sectionHtml(c,ds,future,st);});
+  CKEYS.forEach(function(c){h+=sectionHtml(c,ds,future,st);if(c==="screen"&&!S.coll.screen)h+=eduHtml(ds);});
   return h;
 }
 
@@ -916,7 +980,7 @@ function mineView(){
   var fl=[["all","الكل"]].concat(CKEYS.map(function(c){return [c,CATS[c].edit==="جدول"?"الجدول":CATS[c].name];}));
   h+='<div class="seg">'+fl.map(function(x){return '<button class="pill'+(S.filter===x[0]?" on":"")+'" data-a="filt" data-c="'+x[0]+'">'+x[1]+'</button>';}).join("")+'</div>';
   var act=S.tasks.filter(function(t){return !t.archivedFrom&&(S.filter==="all"||t.cat===S.filter);});
-  var arc=S.tasks.filter(function(t){return t.archivedFrom&&(S.filter==="all"||t.cat===S.filter);});
+  var arc=S.tasks.filter(function(t){return t.archivedFrom&&!t.hid&&(S.filter==="all"||t.cat===S.filter);});
   CKEYS.forEach(function(c){
     var l=act.filter(function(t){return t.cat===c;});
     if(!l.length)return;
@@ -970,14 +1034,14 @@ function recovView(){
   var tot=0,dn=0;info.list.forEach(function(s){tot+=s.t;dn+=s.d;});
   var h='<div class="hero"><div class="day" style="font-size:30px">خطة التعافي</div><div class="date">'+dn+' من '+tot+' خطوة بهذا القسم</div>'+
     '<div class="track" style="margin-top:12px"><div class="fill" style="width:'+(tot?Math.round(dn/tot*100):0)+'%;background:var(--prim);height:100%"></div></div></div>';
-  h+='<div class="seg"><button class="pill'+(S.rtab==="body"?" on":"")+'" data-a="rt" data-v="body">القسم الجسدي</button><button class="pill'+(S.rtab==="mind"?" on":"")+'" data-a="rt" data-v="mind">القسم النفسي</button></div>';
+  h+='<div class="seg"><button class="pill'+(S.rtab==="body"?" on":"")+'" data-a="rt" data-v="body">القسم الجسدي</button><button class="pill'+(S.rtab==="mind"?" on":"")+'" data-a="rt" data-v="mind">القسم النفسي</button><button class="pill'+(S.rtab==="char"?" on":"")+'" data-a="rt" data-v="char">الشخصية والتعامل</button><button class="pill'+(S.rtab==="gap"?" on":"")+'" data-a="rt" data-v="gap">الأساسيات والثقة</button></div>';
   h+='<div class="notice">'+esc(plan.intro)+'</div>';
   info.list.forEach(function(x,i){
     var st=x.st,isCur=i===info.cur;
     var open=S.ropen[st.id]!=null?S.ropen[st.id]:isCur;
     h+='<details class="tg stage c-rec" data-sid="'+st.id+'"'+(open?" open":"")+'><summary><span class="gn">'+esc(st.name)+'</span><span class="gw">'+esc(st.wk)+'</span>'+
       (isCur?'<span class="nowtag">الحالية</span>':x.full?'<span class="donetag">خلصت</span>':'')+'<span class="gc">'+x.d+'/'+x.t+'</span></summary>'+
-      '<div class="sec-hint" style="margin:0 16px 8px">'+esc(st.goal)+'</div><ul class="list" style="padding:0 12px 12px">';
+      '<div class="sec-hint" style="margin:0 16px 8px">'+esc(st.goal)+'</div>'+watchHtml(st)+'<ul class="list" style="padding:0 12px 12px">';
     st.steps.forEach(function(s,j){
       var id=st.id+"-"+j,d=!!S.recov[id];
       h+='<li class="c-rec"><button class="row'+(d?" done":"")+'" data-a="rstep" data-id="'+id+'" aria-pressed="'+d+'"><span class="box">'+I.check+'</span><span class="txt"><b>'+esc(s)+'</b></span></button></li>';
@@ -988,9 +1052,10 @@ function recovView(){
     h+='<div class="card"><h3>أدوات تهدئة سريعة</h3><ul class="list" style="gap:10px">'+CALM.map(function(c){return '<li class="tc"><b>'+esc(c.t)+'</b><div class="th">'+esc(c.h)+'</div></li>';}).join("")+'</ul></div>';
     h+='<div class="card help"><h3>متى تطلب مساعدة؟</h3><p class="sum" style="margin:0 0 8px">كلّم أهلك أو مرشد المدرسة أو طبيب إذا لاحظت:</p><ul style="margin:0;padding-inline-start:20px">'+HELP.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'+
       '<p class="sum" style="margin:10px 0 0"><b>إذا خطرت لك أفكار لإيذاء نفسك:</b> قول لشخص قريب منك الآن، أو توجه لأقرب مستشفى أو جهة طوارئ. طلب المساعدة قوة وهو أهم من أي علامة.</p></div>';
-  }else{
-    h+='<div class="card"><h3>ملاحظات الأكل</h3><ul style="margin:0;padding-inline-start:20px"><li>اهدف لـ 5 حصص فاكهة وخضار باليوم (400 غم على الأقل).</li><li>قلّل السكر المضاف والملح (أقل من 5 غم باليوم) والدهون المشبعة.</li><li>فضّل الحبوب الكاملة والبقوليات والمكسرات.</li><li>ما بنعد سعرات هون ولا في حمية. الهدف أكل منتظم ومتوازن.</li></ul></div>';
+  }else if(S.rtab==="body"){
+    h+=EXC;h+='<div class="card"><h3>ملاحظات الأكل</h3><ul style="margin:0;padding-inline-start:20px"><li>اهدف لـ 5 حصص فاكهة وخضار باليوم (400 غم على الأقل).</li><li>قلّل السكر المضاف والملح (أقل من 5 غم باليوم) والدهون المشبعة.</li><li>فضّل الحبوب الكاملة والبقوليات والمكسرات.</li><li>ما بنعد سعرات هون ولا في حمية. الهدف أكل منتظم ومتوازن.</li></ul></div>';
   }
+  if(S.rtab==="gap")h+=GAPC;
   h+='<div class="sec-hint" style="margin:8px 4px">'+esc(plan.src)+'</div>';
   return h;
 }
@@ -1025,6 +1090,7 @@ document.addEventListener("click",function(ev){
     case "swnext":if(S.sw<ymd(wkStart(new Date()))){S.sw=ymd(addDays(parse(S.sw),7));render();}break;
     case "togmsg":S.set.weeklyMsg=!S.set.weeklyMsg;queue();render();break;
     case "tv":S.tview=b.getAttribute("data-v");render();break;
+    case "jump":var jc=b.getAttribute("data-c");S.coll[jc]=false;render();var je=document.getElementById("sec-"+jc);if(je)je.scrollIntoView({behavior:"smooth"});break;
     case "rt":S.rtab=b.getAttribute("data-v");render();break;
     case "rstep":toggleStep(b.getAttribute("data-id"));break;
     case "filt":S.filter=b.getAttribute("data-c");render();break;
